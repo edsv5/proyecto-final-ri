@@ -1,6 +1,4 @@
 package main;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
-import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -17,8 +15,8 @@ public class BSBI_Indexer
 
     public static void creacionIndices(int tamBloque)
     {
-        bloques = PrepLing.documentos;
-        numDocs = PrepLing.documentos.size();
+        bloques = PreprocesadorLDocumentos.documentos;
+        numDocs = PreprocesadorLDocumentos.documentos.size();
         listaPares = new ArrayList<ArrayList<ParTermId>>();
         indice =  new TreeMap<String, ArrayList<Integer>>();
         indiceFrecuencial = new TreeMap<String, ArrayList<ParIdFrec>>();
