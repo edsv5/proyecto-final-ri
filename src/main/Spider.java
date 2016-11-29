@@ -104,16 +104,6 @@ public class Spider
     }
 
 
-    /*public static boolean filtrarPorUrl(String enlace)
-    {
-        boolean filtrar = true;
-        if(!enlace.contains("#") && !enlace.contains("File") && !enlace.contains("?") &&
-           !enlace.contains("BookSources") && !enlace.contains("Template") && !enlace.contains("("))
-            filtrar = false;
-        return filtrar;
-    }*/
-
-
     // Todas las letras de lyricsmode son del formato http://www.lyricsmode.com/lyrics/<letra>/<artista>/<nombre_de_la_canción>.html
     public static boolean filtrarPorUrl(String enlace){
         //System.out.println("Link: " + enlace);
@@ -149,7 +139,7 @@ public class Spider
             // Se cambia este print para que no lo saque en consola, sino que lo saque en la ventana
 
             Document doc = recuperarDocumento(link);
-            PrepLing.preprocesar(doc);
+            PreprocesadorLDocumentos.preprocesar(doc);
 
             ArrayList<String> res = new ArrayList<String>();
             res.add(doc.title());
@@ -188,7 +178,7 @@ public class Spider
 
                     Document doc = recuperarDocumento(link);
 
-                    PrepLing.preprocesar(doc);
+                    PreprocesadorLDocumentos.preprocesar(doc);
 
                     ArrayList<String> res = new ArrayList<String>();
                     res.add(doc.title());
