@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,6 +19,9 @@ import java.util.regex.Pattern;
 public class Spider
 {
 
+    static ArrayList<String> enlacesPorLetra = new ArrayList<String>();
+    static ArrayList<String> enlacesArtistasGlobal = new ArrayList<String>();
+    static ArrayList<String> enlacesCancionesGlobal = new ArrayList<String>();
     static ArrayList<String> enlaces = new ArrayList<String>();
     static int nivel = 0;
     static int cantidad = 0;
@@ -26,17 +30,15 @@ public class Spider
     static int contadorLinks = 0;
 
 
-
-
-
-    public static Document recuperarDocumento(String url)  throws java.net.URISyntaxException
+    public static Document recuperarDocumento(String url)
     {
         Document doc = null;
-
         try
         {
-
-            Connection con  = Jsoup.connect(url).ignoreContentType(true).userAgent("Mozilla/5.0").timeout(100000);
+            Connection con  = Jsoup.connect(url)
+                                   .ignoreContentType(true)
+                                   .userAgent("Mozilla/5.0")
+                                   .timeout(100000);
             Connection.Response resp = con.execute();
 
             URI uri = new URI(url);
@@ -48,11 +50,10 @@ public class Spider
             }
 
         }
-        catch (IOException ex)
+        catch (IOException | URISyntaxException ex)
         {
             System.out.println("Excepción al obtener el HTML de la página " + url + " " + ex.getMessage());
         }
-
         return doc;
     }
 
@@ -93,6 +94,55 @@ public class Spider
         return enlacesDoc;
     }
 
+    public static void obtenerEnlacesInicialDesdePrincipal(String link)
+    {
+        Document doc = recuperarDocumento(link);
+        Elements enlaces = doc.select(".clearfix.fs13.char_nav a");
+        for(Element enlace: enlaces)
+        {
+            enlacesPorLetra.add(enlace.absUrl("href"));
+        }
+
+    }
+
+    public static void obtenerEnlacesArtistaPorLetra()
+    {
+
+        for(String enlaceLetra: enlacesPorLetra)
+        {
+            Document doc = recuperarDocumento(enlaceLetra);
+            Elements artistas = doc.select("a[href^=/lyrics/][title]");
+            for(Element enlaceArtista: artistas)
+            {
+                enlacesArtistasGlobal.add(enlaceArtista.absUrl("href"));
+            }
+        }
+    }
+
+    public static void obtenerEnlacesCancionPorArtista()
+    {
+        int contador = 0;
+        for(String enlaceArtista: enlacesArtistasGlobal)
+        {
+            System.out.println("Artista actual " + enlaceArtista);
+            Document doc = recuperarDocumento(enlaceArtista);
+            Elements canciones = doc.select(".ui-song-title");
+            for(Element enlaceCancion: canciones)
+            {
+                if(contador <= 100)
+                {
+                    enlacesCancionesGlobal.add(enlaceCancion.absUrl("href"));
+                    contador++;
+                }
+                else
+                {
+                    return;
+                }
+
+            }
+        }
+    }
+
     public static boolean filtrarPorTitulo(String titulo)
     {
         boolean filtrar = false;
@@ -122,44 +172,6 @@ public class Spider
         return filtrar;
     }
 
-    // Crawlea un link a la vez
-
-    public static void crawlIteracion(String link, int profundidad, int limite)  throws java.net.URISyntaxException
-    {
-
-        if(!link.isEmpty())
-        {
-            nivel ++;
-            if (enlaces.contains(link)) {
-                return;
-            }
-            enlaces.add(link);
-            cantidad ++;
-            //System.out.println("Documento #" + cantidad + " Link: " + link); // Aquí se hace la impresión de cada documento
-            // Se cambia este print para que no lo saque en consola, sino que lo saque en la ventana
-
-            Document doc = recuperarDocumento(link);
-            PreprocesadorLDocumentos.preprocesar(doc);
-
-            ArrayList<String> res = new ArrayList<String>();
-            res.add(doc.title());
-            res.add(link);
-            Resultados.agregarResultado(cantidad, res);
-
-            ArrayList<String> nuevosEnlaces = obtenerEnlaces(doc);
-            try
-            {
-                if(nivel <= profundidad && cantidad <= limite)
-                {
-                    crawl(nuevosEnlaces, profundidad, limite);
-                    nivel --;
-                }
-                else return;
-            }
-            catch(NullPointerException e) {}
-        }
-
-    }
 
     public static void crawl(ArrayList<String> links, int profundidad, int limite)  throws java.net.URISyntaxException
     {
@@ -216,6 +228,7 @@ public class Spider
     // Hace la búsqueda y devuelve la lista de enlaces
     public static List<String> busqueda(int profundidad, int limite) throws java.net.URISyntaxException
     {
+        //pruebitaBorrarDespues();
         Document docInicial = recuperarDocumento("http://www.lyricsmode.com");
         ArrayList<String> listaInicial = new ArrayList<String>();
         listaInicial = Spider.obtenerEnlaces(docInicial);
@@ -225,6 +238,13 @@ public class Spider
         return arregloEnlaces(); // Devuelve la lista de enlaces
     }
 
+    public static void pruebitaBorrarDespues()
+    {
+        obtenerEnlacesInicialDesdePrincipal("http://www.lyricsmode.com");
+        obtenerEnlacesArtistaPorLetra();
+        obtenerEnlacesCancionPorArtista();
+        System.out.println("Terminó: " + enlacesCancionesGlobal.size());
+    }
     public static void imprimirEnlaces()
     {
         System.out.println("Impresión de araña: ");
