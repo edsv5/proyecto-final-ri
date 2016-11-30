@@ -19,7 +19,7 @@ public class App extends Application {
         Parent root = (Parent)loader.load();
         Scene scene = new Scene(root, 600, 400); // Se crea la scene
 
-        primaryStage.setTitle("Mi Canal");
+        primaryStage.setTitle("Mi Canal, penes");
         primaryStage.setResizable(false); // Se pone esto para que no pueda ser resizable
         primaryStage.setScene(scene);
         primaryStage.show();

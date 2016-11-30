@@ -99,12 +99,10 @@ public class MainController implements Initializable {
 
     // Cancela el hilo de la búsqueda, si está activo
     public void cancelarTaskBusqueda(){
-        /*
-        if(taskCrawl.isRunning()){
-            System.out.println("Búsqueda cancelada");
+        taskBuscar.cancel();
+        if(taskBuscar.isRunning()){
+            System.out.println("Task corriendo");
         }
-        taskCrawl.cancel();
-        */
     }
 
     //Tarea de hacer el crawling de enlaces
