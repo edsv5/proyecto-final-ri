@@ -130,7 +130,7 @@ public class MainController implements Initializable {
         // Si la entrada es un número, ejecuta el método
         System.out.println("INT");
         ArrayList<String> lista = crawlear(profundidad, limite); // Se almacena la lista de enlaces
-        Scraper.extraer(lista);
+        ArrayList<Cancion> listaCanciones = Scraper.extraerYAgregarALista(lista);
         indexar(); // Se indexan
         imprimirEnlaces(lista);
 

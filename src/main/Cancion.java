@@ -15,4 +15,24 @@ public class Cancion
         this.artista = artista;
         this.letra= letra;
     }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public String getTitulo()
+    {
+        return titulo;
+    }
+
+    public String getArtista()
+    {
+        return artista;
+    }
+
+    public String getLetra()
+    {
+        return letra;
+    }
 }

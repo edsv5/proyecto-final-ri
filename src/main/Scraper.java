@@ -11,7 +11,7 @@ public class Scraper
 {
     static ArrayList<Cancion> listaCanciones = new ArrayList<Cancion>();
 
-    public static void extraerYAgregarALista(ArrayList<String> enlacesCanciones)
+    public static ArrayList<Cancion> extraerYAgregarALista(ArrayList<String> enlacesCanciones)
     {
         int idContador = 1;
         for(String enlace: enlacesCanciones)
@@ -23,6 +23,7 @@ public class Scraper
             listaCanciones.add(new Cancion(idContador, titulo, artista, letra));
             idContador ++;
         }
+        return listaCanciones;
     }
 
     public static String extraerArtista(Document doc)
