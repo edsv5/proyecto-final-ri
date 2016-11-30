@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -51,6 +52,7 @@ public class MainController implements Initializable {
 
         // Inicia el crawl
         startTaskBusqueda();
+
         // Crea y abre la interfaz que muestra resultados
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Buscador.fxml"));
         Parent root = (Parent)loader.load();
@@ -127,20 +129,21 @@ public class MainController implements Initializable {
         enlacesTextArea.appendText("Crawleando..." + System.lineSeparator());
         // Si la entrada es un número, ejecuta el método
         System.out.println("INT");
-        List<String> lista = crawlear(profundidad, limite); // Se almacena la lista de enlaces
+        ArrayList<String> lista = crawlear(profundidad, limite); // Se almacena la lista de enlaces
+        Scraper.extraer(lista);
         indexar(); // Se indexan
         imprimirEnlaces(lista);
 
     }
 
     // Para que la araña crawlee, devuelve la lista de los enlaces
-    public List<String> crawlear(int profundidad, int limite)
+    public ArrayList<String> crawlear(int profundidad, int limite)
     {
         System.out.println("Crawling iniciado");
         try
         {
             List<String> arregloEnlaces = busqueda(profundidad,limite);
-            enlacesTextArea.appendText("Imprimiendo enlaces..." + System.lineSeparator());
+            enlacesTextArea.appendText("Imprimiendo enlaces 1..." + System.lineSeparator());
         }
         catch(URISyntaxException e){}
         return arregloEnlaces();
@@ -156,7 +159,7 @@ public class MainController implements Initializable {
     // Imprimir los enlaces en la cajita de abajo, recibe una lista de enlacs
 
     public void imprimirEnlaces(List<String> listaEnlaces){
-        System.out.println("Imprimiendo enlaces");
+        System.out.println("Imprimiendo enlaces 2 " + listaEnlaces.size());
         for(String en: listaEnlaces) // Por cada string que devuelve el método crawlear
         {
             //System.out.println(en);
