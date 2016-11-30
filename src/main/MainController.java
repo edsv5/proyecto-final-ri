@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -30,13 +31,16 @@ public class MainController implements Initializable {
 
     }
 
-
     // Para hacer referencia al stage principal
 
 
     // Este es el texto que se va a mostrar cuando apretamos el botón
     @FXML
-    private TextArea enlacesTextArea;
+    private TextArea enlacesTextArea; // Donde se imprimen los enlaces
+    @FXML
+    private TextField txtFldCantidadLinks; // Texto que ingresa el usuario para decidir la cantidad de links
+    @FXML
+    private TextField txtFldProfundidadCrawl; // Texto que ingresa el usuario para decidir la profundidad
 
     // Esto es lo que va a suceder cuando apretemos el botón
     public void iniciarBusqueda(ActionEvent event){
@@ -75,7 +79,11 @@ public class MainController implements Initializable {
                     @Override
                     protected Void call() throws Exception {
                         // Toma lo que hay en los campos de texto
-                        runTaskBusqueda(5, 10); // Ejecuta el método que hace la búsqueda
+                        int limite = Integer.parseInt(txtFldCantidadLinks.getText());
+                        int profundidad = Integer.parseInt(txtFldProfundidadCrawl.getText());
+
+                        // Y corre el crawl
+                        runTaskBusqueda(profundidad, limite); // Ejecuta el método que hace la búsqueda
                         return null;
                     }
                 };
@@ -107,7 +115,10 @@ public class MainController implements Initializable {
 
     //Tarea de hacer el crawling de enlaces
     public void runTaskBusqueda(int profundidad, int limite){
+
         enlacesTextArea.appendText("Crawleando..." + System.lineSeparator());
+        // Si la entrada es un número, ejecuta el método
+        System.out.println("INT");
         List<String> lista = crawlear(profundidad, limite); // Se almacena la lista de enlaces
         indexar(); // Se indexan
         imprimirEnlaces(lista);
