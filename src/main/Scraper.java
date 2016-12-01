@@ -36,7 +36,7 @@ public class Scraper
     public static String extraerLetra(Document doc)
     {
         Element parrafoLetra = doc.select("#lyrics_text").first();
-        String letra = parrafoLetra.text();
+        String letra = parrafoLetra.html();
         letra = PreprocesadorLDocumentos.normalizar(letra);
         return letra;
     }

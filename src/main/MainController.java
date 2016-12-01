@@ -131,6 +131,9 @@ public class MainController implements Initializable {
         System.out.println("INT");
         ArrayList<String> lista = crawlear(profundidad, limite); // Se almacena la lista de enlaces
         ArrayList<Cancion> listaCanciones = Scraper.extraerYAgregarALista(lista);
+        BaseCanciones.guardarInfoCanciones(listaCanciones);
+        ArrayList<ContenedorTerminoIdPosicion> indiceIntermedio = IndiceIntermedio.recorrerJSONLeido();
+        IndiceIntermedio.imprimirLista();
         indexar(); // Se indexan
         imprimirEnlaces(lista);
 

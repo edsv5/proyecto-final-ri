@@ -48,7 +48,7 @@ public class PreprocesadorLDocumentos
     public static String removerCaracteresEspeciales(String texto)
     {
         texto = texto.replaceAll(" lyrics","");
-        texto = texto.replaceAll("'", ""); //En el caso de la comilla se elimina, no se sustituye por espacio
+        texto = texto.replaceAll("\\'", ""); //En el caso de la comilla se elimina, no se sustituye por espacio
         texto = texto.replaceAll("\\[(A-Za-z0-9)+\\]", " ");
         texto = texto.replaceAll("[^A-Za-z0-9 ]", " ");
         texto = texto.replaceAll("[ ]+", " ");
@@ -71,7 +71,6 @@ public class PreprocesadorLDocumentos
                 sb.append(texto.charAt(i));
             }
         }
-
         return sb.toString();
     }
 

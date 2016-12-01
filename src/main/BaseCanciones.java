@@ -9,8 +9,8 @@ public class BaseCanciones
 {
     public static void guardarInfoCanciones(ArrayList<Cancion> listaCanciones)
     {
-        JSONObject objetoCancion = procesarCanciones(listaCanciones);
-
+        JSONObject objetoCanciones = procesarCanciones(listaCanciones);
+        EscritorJSON.escribir(objetoCanciones);
     }
 
     public static JSONObject datosCancion(Cancion cancion)
@@ -31,20 +31,20 @@ public class BaseCanciones
 
     public static JSONObject procesarCanciones(ArrayList<Cancion> listaCanciones)
     {
-        JSONObject objetoCancion = new JSONObject();
+        JSONObject objetoCanciones = new JSONObject();
         try
         {
             for(Cancion cancion: listaCanciones)
             {
                 String id = String.valueOf(cancion.getId());
-                objetoCancion.put(id, datosCancion(cancion) );
+                objetoCanciones.put(id, datosCancion(cancion) );
             }
         }
         catch(JSONException ex)
         {
             System.out.println(ex);
         }
-        return objetoCancion;
+        return objetoCanciones;
     }
 
 }
