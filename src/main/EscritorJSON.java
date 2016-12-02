@@ -10,7 +10,7 @@ public class EscritorJSON
 {
     public static void escribir(JSONObject objeto)
     {
-        try (FileWriter file = new FileWriter("BaseCanciones.json"))
+        try (FileWriter file = new FileWriter("BaseCancion.json"))
         {
             file.write(objeto.toString());
 

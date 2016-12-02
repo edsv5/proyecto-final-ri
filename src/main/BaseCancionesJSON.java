@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BaseCanciones
+public class BaseCancionesJSON
 {
     public static void guardarInfoCanciones(ArrayList<Cancion> listaCanciones)
     {

@@ -68,7 +68,7 @@ public class IndiceIntermedio
 
         try (PrintStream out = new PrintStream(new FileOutputStream("indiceInt.txt")))
         {
-           out.print(imp);
+            out.print(imp);
         }
         catch(IOException ex)
         {

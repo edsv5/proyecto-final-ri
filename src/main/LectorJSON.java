@@ -19,7 +19,7 @@ public class LectorJSON
         try
         {
             JSONParser parser = new JSONParser();
-            objeto = parser.parse(new FileReader("BaseCanciones.json"));
+            objeto = parser.parse(new FileReader("BaseCancionesJSON.json"));
         }
         catch( ParseException | IOException ex)
         {

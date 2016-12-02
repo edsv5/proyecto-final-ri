@@ -156,7 +156,7 @@ public class Spider
                 {
                     enlaces.add(link);
                     cantidad ++;
-                    System.out.println("Documento #" + cantidad + " Link: " + link); // Aquí se hace la impresión de cada documento
+                   // System.out.println("Documento #" + cantidad + " Link: " + link); // Aquí se hace la impresión de cada documento
 
                     Document doc = Recuperador.recuperarDocumento(link);
 
