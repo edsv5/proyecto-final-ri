@@ -11,6 +11,11 @@ public class IndicePosicional
 {
     static TreeMap<String, ArrayList<Posting>> indice = new TreeMap<String, ArrayList<Posting>>();
 
+    public static TreeMap<String, ArrayList<Posting>> obtenerIndice()
+    {
+        return indice;
+    }
+
     public static void construirIndicePosicional(ArrayList<ContenedorTerminoIdPosicion> indiceIntermedio)
     {
         for(ContenedorTerminoIdPosicion contenedor: indiceIntermedio)
@@ -40,12 +45,10 @@ public class IndicePosicional
     {
         for(Map.Entry<String, ArrayList<Posting>> entry : indice.entrySet())
         {
-
             String termino = entry.getKey();
             ArrayList<Posting> listaPostings = entry.getValue();
             listaPostings = acumularLista(listaPostings);
             indice.put(termino, listaPostings);
-
         }
     }
 

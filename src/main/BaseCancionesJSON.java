@@ -7,10 +7,30 @@ import java.util.ArrayList;
 
 public class BaseCancionesJSON
 {
-    public static void guardarInfoCanciones(ArrayList<Cancion> listaCanciones)
+    public static void guardarInfoCanciones(ArrayList<Cancion> listaCanciones) throws JSONException
     {
         JSONObject objetoCanciones = procesarCanciones(listaCanciones);
-        EscritorJSON.escribir(objetoCanciones);
+        EscritorJSON.escribir(objetoCanciones, "BaseCanciones.json");
+
+    }
+
+    public static JSONObject procesarCanciones(ArrayList<Cancion> listaCanciones)
+    {
+        JSONObject objetoCanciones = new JSONObject();
+        try
+        {
+            for(Cancion cancion: listaCanciones)
+            {
+                String id = String.valueOf(cancion.getId());
+                objetoCanciones.put(id, datosCancion(cancion));
+                //System.out.println("can " + id );
+            }
+        }
+        catch(JSONException ex)
+        {
+            System.out.println(ex);
+        }
+        return objetoCanciones;
     }
 
     public static JSONObject datosCancion(Cancion cancion)
@@ -27,24 +47,6 @@ public class BaseCancionesJSON
             System.out.println("Error al crear objeto JSON " + ex);
         }
         return datosCancion;
-    }
-
-    public static JSONObject procesarCanciones(ArrayList<Cancion> listaCanciones)
-    {
-        JSONObject objetoCanciones = new JSONObject();
-        try
-        {
-            for(Cancion cancion: listaCanciones)
-            {
-                String id = String.valueOf(cancion.getId());
-                objetoCanciones.put(id, datosCancion(cancion) );
-            }
-        }
-        catch(JSONException ex)
-        {
-            System.out.println(ex);
-        }
-        return objetoCanciones;
     }
 
 }

@@ -143,13 +143,11 @@ public class Ranker
     public String imprimirRanking()
     {
         StringBuilder sb = new StringBuilder();
-
         sb.append("Score DocId\n");
         for(ParScoreId par : ranking)
         {
             sb.append(par.getScore() + " " + par.getDocId() + "\n");
         }
-
         sb.append(ranking.size());
         return sb.toString();
     }

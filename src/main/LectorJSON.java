@@ -12,14 +12,13 @@ import java.util.Iterator;
 
 public class LectorJSON
 {
-    public static Object leerDatosCanciones()
+    public static Object leerDatosJSON(String nombre)
     {
         Object objeto = null;
-
         try
         {
             JSONParser parser = new JSONParser();
-            objeto = parser.parse(new FileReader("BaseCancionesJSON.json"));
+            objeto = parser.parse(new FileReader(nombre));
         }
         catch( ParseException | IOException ex)
         {

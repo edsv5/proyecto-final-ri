@@ -20,11 +20,11 @@ public class IndiceIntermedio
 
     public static ArrayList<ContenedorTerminoIdPosicion> recorrerJSONLeido()
     {
-        Object objeto = LectorJSON.leerDatosCanciones();
+        Object objeto = LectorJSON.leerDatosJSON("BaseCanciones.json");
         JSONObject base = (JSONObject) objeto;
-        for(Iterator iterator = base.keySet().iterator(); iterator.hasNext();)
+        for(Iterator iterador = base.keySet().iterator(); iterador.hasNext();)
         {
-            String  idDoc = (String) iterator.next();
+            String  idDoc = (String) iterador.next();
             JSONObject objetoCancion = (JSONObject) base.get(idDoc);
             String letras = (String) objetoCancion.get("letra");
             ArrayList<String> listaTerminos = tokenizarLetras(letras);

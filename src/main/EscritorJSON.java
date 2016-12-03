@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class EscritorJSON
 {
-    public static void escribir(JSONObject objeto)
+    public static void escribir(JSONObject objeto, String nombre)
     {
-        try (FileWriter file = new FileWriter("BaseCancion.json"))
+        try (FileWriter file = new FileWriter(nombre))
         {
             file.write(objeto.toString());
 

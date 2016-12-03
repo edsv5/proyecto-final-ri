@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 
 import static main.Spider.arregloEnlaces;
 import static main.Spider.busqueda;
@@ -124,8 +126,8 @@ public class MainController implements Initializable {
     }
 
     //Tarea de hacer el crawling de enlaces
-    public void runTaskBusqueda(int profundidad, int limite){
-
+    public void runTaskBusqueda(int profundidad, int limite) throws JSONException
+    {
         enlacesTextArea.appendText("Crawleando..." + System.lineSeparator());
         // Si la entrada es un número, ejecuta el método
         System.out.println("INT");
@@ -136,9 +138,12 @@ public class MainController implements Initializable {
         IndiceIntermedio.imprimirLista();
         IndicePosicional.construirIndicePosicional(indiceIntermedio);
         IndicePosicional.imprimirIndicePosicional();
+        TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
+        IndiceJSON.guardarIndicePosicional(indice);
+        Ranking.rankearConsulta("aint burn chill chrome");
+        Ranking.imprimirRanking();
         indexar(); // Se indexan
         imprimirEnlaces(lista);
-
     }
 
     // Para que la araña crawlee, devuelve la lista de los enlaces
