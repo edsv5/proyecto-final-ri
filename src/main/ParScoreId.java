@@ -19,6 +19,10 @@ public class ParScoreId implements Comparable<ParScoreId>
 
     public Double getScore() { return score; }
     public int getDocId()      { return docId;}
+    public void aumentarScore(double aumento)
+    {
+        score += aumento;
+    }
 
     @Override
     public int compareTo(ParScoreId par1)

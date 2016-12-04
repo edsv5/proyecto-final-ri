@@ -26,7 +26,6 @@ public class IndiceJSON
                 String termino = entry.getKey();
                 ArrayList<Posting> postings = entry.getValue();
                 objetoTermino.put(termino, obtenerArregloPostings(postings));
-
             }
         }
         catch(JSONException ex)

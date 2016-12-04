@@ -7,10 +7,8 @@ import org.json.simple.JSONObject;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Ranking
 {
@@ -23,7 +21,6 @@ public class Ranking
         int numDocs = obtenerNumdocs();
         ArrayList<String> consultaTokens = new ArrayList<String>(Arrays.asList(consulta.split(" ")));
         ArrayList<Double> pesosConsulta = construirVectorConsulta(consultaTokens, numDocs);
-
         for(int id = 1; id <= numDocs; id++)
         {
             double score = 0;
@@ -32,6 +29,27 @@ public class Ranking
             ranking.add(new ParScoreId(score, id));
         }
         ordenarRanking();
+        agregarPuntajePorFrase(consultaTokens);
+    }
+
+    public static  void agregarPuntajePorFrase(ArrayList<String> consultaTokens)
+    {
+        PuntajePorFrase.llenarListaDocumentosConConsulta(indicePosicional, consultaTokens);
+        ArrayList<Integer> interseccion = PuntajePorFrase.obtenerListaConFraseCompleta();
+        PuntajePorFrase.obtenerFrecuenciasDocumentosConFraseCompleta(indicePosicional, consultaTokens, interseccion);
+        PuntajePorFrase.imprimirLista();
+        ArrayList<ParScoreId> extra = PuntajePorFrase.revisarSiTieneFrase(consultaTokens);
+        for(ParScoreId parExtra: extra)
+        {
+            for(ParScoreId par: ranking)
+            {
+                if(parExtra.getDocId() == par.getDocId())
+                {
+                    par.aumentarScore(parExtra.getScore());
+                    break;
+                }
+            }
+        }
     }
 
     public static ArrayList<Double> construirVectorConsulta(ArrayList<String> consultaTokens, int numDocs)
@@ -111,6 +129,7 @@ public class Ranking
     {
         ranking.sort(new compParScoreId().reversed());
     }
+
 
     public static void imprimirRanking()
     {

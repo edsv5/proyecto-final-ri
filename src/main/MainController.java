@@ -140,7 +140,8 @@ public class MainController implements Initializable {
         IndicePosicional.imprimirIndicePosicional();
         TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
         IndiceJSON.guardarIndicePosicional(indice);
-        Ranking.rankearConsulta("aint burn chill chrome");
+        Ranking.rankearConsulta("she made it easy");
+        //Ranking.rankearConsulta("just shut up and be mine");
         Ranking.imprimirRanking();
         indexar(); // Se indexan
         imprimirEnlaces(lista);
