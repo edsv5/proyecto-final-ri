@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="apPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MainController">
+    <children>
+        <BorderPane prefHeight="400.0" prefWidth="600.0">
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="Archivo">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#doExit" text="Salir" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+         <bottom>
+            <TextArea fx:id="enlacesTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="15.0" left="15.0" right="15.0" />
+               </BorderPane.margin>
+            </TextArea>
+         </bottom>
+         <center>
+            <GridPane style="-fx-border-color: gray;" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="365.0" minWidth="10.0" prefWidth="299.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="299.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="299.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <GridPane GridPane.columnIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Profundidad del crawling" textAlignment="CENTER" wrappingWidth="200.13671875" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Text>
+                        <TextField fx:id="txtFldProfundidadCrawl" alignment="CENTER" prefHeight="46.0" prefWidth="130.0" promptText="Ingrese el nivel de crawling" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets bottom="5.0" />
+                           </GridPane.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextField>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cantidad de links" textAlignment="CENTER" wrappingWidth="200.13671875">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="txtFldCantidadLinks" alignment="CENTER" prefHeight="46.0" prefWidth="130.0" promptText="Ingrese la cantidad de links" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <GridPane.margin>
+                              <Insets bottom="5.0" />
+                           </GridPane.margin>
+                        </TextField>
+                     </children>
+                  </GridPane>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                            <Button fx:id="iniciarCrawlingButton" mnemonicParsing="false" onAction="#iniciarBusqueda" prefHeight="43.0" prefWidth="176.0" text="Iniciar crawling">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                            </Button>
+                        <ProgressBar fx:id="progressBarCrawl" prefHeight="26.0" prefWidth="199.0" progress="0.0" GridPane.rowIndex="2">
+                           <padding>
+                              <Insets left="10.0" right="15.0" />
+                           </padding>
+                        </ProgressBar>
+                        <Text fx:id="txtProgreso" strokeType="OUTSIDE" strokeWidth="0.0" text="Inactivo" wrappingWidth="138.13671875" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="50.0" />
+                           </GridPane.margin>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Estado:" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="6.0" />
+                           </GridPane.margin>
+                        </Text>
+                     </children>
+                  </GridPane>
+                  <GridPane GridPane.columnIndex="2">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="92.0" minHeight="0.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="salirButton" mnemonicParsing="false" onAction="#doExit" prefHeight="43.0" prefWidth="176.0" text="Salir" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Button>
+                        <Button fx:id="menuButton" mnemonicParsing="false" onAction="#mostrarMenuPrincipal" prefHeight="43.0" prefWidth="176.0" text="Menú principal" GridPane.halignment="CENTER">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="abrirBusquedaButton" mnemonicParsing="false" onAction="#abrirVentanaBusqueda" prefHeight="43.0" prefWidth="176.0" text="Iniciar búsqueda" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </GridPane>
+               </children>
+            </GridPane>
+         </center>
+        </BorderPane>
+    </children>
+</AnchorPane>
