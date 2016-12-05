@@ -11,8 +11,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONException;
 
@@ -47,6 +50,14 @@ public class MainController implements Initializable {
     private TextField txtFldCantidadLinks; // Texto que ingresa el usuario para decidir la cantidad de links
     @FXML
     private TextField txtFldProfundidadCrawl; // Texto que ingresa el usuario para decidir la profundidad
+    @FXML
+    private ProgressBar progressBarCrawl;
+    @FXML
+    private Text txtProgreso; // Label que indica el estado del crawling
+    @FXML
+    private Button iniciarCrawlingButton; // Botón de iniciar crawling
+    @FXML
+    private Button abrirBusquedaButton; // Botón de iniciar búsqueda
 
     private Stage resultadosStage;
     // Esto es lo que va a suceder cuando apretemos el botón
@@ -54,7 +65,9 @@ public class MainController implements Initializable {
 
         // Inicia el crawl
         startTaskBusqueda();
+    }
 
+    public void abrirVentanaBusqueda(ActionEvent event) throws IOException{
         // Crea y abre la interfaz que muestra resultados
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Buscador.fxml"));
         Parent root = (Parent)loader.load();
@@ -94,7 +107,7 @@ public class MainController implements Initializable {
                         int limite = Integer.parseInt(txtFldCantidadLinks.getText());
                         int profundidad = Integer.parseInt(txtFldProfundidadCrawl.getText());
 
-                        // Y corre el crawl
+                        // Corre el crawl
                         runTaskBusqueda(profundidad, limite); // Ejecuta el método que hace la búsqueda
                         return null;
                     }
@@ -110,11 +123,6 @@ public class MainController implements Initializable {
         });
 
         taskBuscar.restart();
-
-        // Hacerlo subtarea del hilo principal
-        //th.setDaemon(true);
-        // Correrse
-        //th.start();
     }
 
     // Cancela el hilo de la búsqueda, si está activo
@@ -128,23 +136,53 @@ public class MainController implements Initializable {
     //Tarea de hacer el crawling de enlaces
     public void runTaskBusqueda(int profundidad, int limite) throws JSONException
     {
-        enlacesTextArea.appendText("Crawleando..." + System.lineSeparator());
-        // Si la entrada es un número, ejecuta el método
-        System.out.println("INT");
+        // Deshabilita los botones
+        iniciarCrawlingButton.setDisable(true);
+        abrirBusquedaButton.setDisable(true);
+        progressBarCrawl.setProgress(0.1); //ACTUALIZA
+        txtProgreso.setText("Crawling...");
         ArrayList<String> lista = crawlear(profundidad, limite); // Se almacena la lista de enlaces
+
+        progressBarCrawl.setProgress(0.2); //ACTUALIZA
+        txtProgreso.setText("Extrayendo...");
         ArrayList<Cancion> listaCanciones = Scraper.extraerYAgregarALista(lista);
+
+        progressBarCrawl.setProgress(0.3); //ACTUALIZA
+        txtProgreso.setText("Guardando información...");
         BaseCancionesJSON.guardarInfoCanciones(listaCanciones);
+
+        progressBarCrawl.setProgress(0.4); //ACTUALIZA
+        txtProgreso.setText("Creando índice intermedio");
         ArrayList<ContenedorTerminoIdPosicion> indiceIntermedio = IndiceIntermedio.recorrerJSONLeido();
+
+        progressBarCrawl.setProgress(0.5); //ACTUALIZA
+        txtProgreso.setText("Imprimiendo lista...");
         IndiceIntermedio.imprimirLista();
+
+        progressBarCrawl.setProgress(0.6); //ACTUALIZA
+        txtProgreso.setText("Construyendo índice posicional...");
         IndicePosicional.construirIndicePosicional(indiceIntermedio);
+
+        progressBarCrawl.setProgress(0.7); //ACTUALIZA
+        txtProgreso.setText("Imprimiendo índice posicional...");
         IndicePosicional.imprimirIndicePosicional();
+
+        progressBarCrawl.setProgress(0.8); //ACTUALIZA
+        txtProgreso.setText("Guardando índice...");
         TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
         IndiceJSON.guardarIndicePosicional(indice);
-        Ranking.rankearConsulta("she made it easy");
-        //Ranking.rankearConsulta("just shut up and be mine");
+
+        progressBarCrawl.setProgress(0.9); //ACTUALIZA
+        txtProgreso.setText("Rankeando consulta...");
+        Ranking.rankearConsulta("said to stay away from");
         Ranking.imprimirRanking();
-        indexar(); // Se indexan
+
+        progressBarCrawl.setProgress(1); //ACTUALIZA
+        txtProgreso.setText("Completado");
         imprimirEnlaces(lista);
+        iniciarCrawlingButton.setDisable(false);
+        abrirBusquedaButton.setDisable(false);
+
     }
 
     // Para que la araña crawlee, devuelve la lista de los enlaces
@@ -154,7 +192,7 @@ public class MainController implements Initializable {
         try
         {
             List<String> arregloEnlaces = busqueda(profundidad,limite);
-            enlacesTextArea.appendText("Imprimiendo enlaces 1..." + System.lineSeparator());
+            enlacesTextArea.appendText("Enlaces:" + System.lineSeparator());
         }
         catch(URISyntaxException e){}
         return arregloEnlaces();
@@ -177,17 +215,6 @@ public class MainController implements Initializable {
             enlacesTextArea.appendText(en + System.lineSeparator());
         }
     }
-
-    // Para que busque los enlaces en el background
-
-
-/*
-    public void stopTaskBusqueda(){
-
-        backgroundThread.stop();
-    }*/
-
-
 
     // Para el botón de salir del menú
 

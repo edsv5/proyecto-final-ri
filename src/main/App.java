@@ -22,17 +22,6 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        /*
-        Scene secondScene = new Scene(root, 800, 400);
-        Stage secondStage = new Stage();
-        secondStage.setTitle("Your to-do.....");
-        secondStage.setScene(secondScene);
-        //secondStage.initStyle(StageStyle.DECORATED);
-        //secondStage.initModality(Modality.NONE);
-        secondStage.initOwner(primaryStage);
-        primaryStage.toFront();
-        secondStage.show();
-*/
 
     }
 
