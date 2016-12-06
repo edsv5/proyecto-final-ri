@@ -1,16 +1,10 @@
 package main;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,7 +55,6 @@ public class Spider
                 }
             }
         }
-
         return enlacesDoc;
     }
 
@@ -141,79 +134,29 @@ public class Spider
 
         return filtrar;
     }
-
-
-    public static void crawl(ArrayList<String> links, int profundidad, int limite)  throws java.net.URISyntaxException
-    {
-
-        if(!links.isEmpty())
-        {
-            nivel ++;
-
-            for(String link : links)
-            {
-                if(!enlaces.contains(link))
-                {
-                    enlaces.add(link);
-                    cantidad ++;
-                   // System.out.println("Documento #" + cantidad + " Link: " + link); // Aquí se hace la impresión de cada documento
-
-                    Document doc = Recuperador.recuperarDocumento(link);
-
-                    PreprocesadorLDocumentos.preprocesar(doc);
-
-                    ArrayList<String> res = new ArrayList<String>();
-                    res.add(doc.title());
-                    res.add(link);
-                    Resultados.agregarResultado(cantidad, res);
-
-                    // Aumentar el contador de progreso
-
-                    contadorLinks++;
-
-                    ArrayList<String> nuevosEnlaces = obtenerEnlaces(doc);
-
-                    try
-                    {
-                        if(nivel <= profundidad && cantidad <= limite)
-                        {
-                            crawl(nuevosEnlaces, profundidad, limite);
-                            nivel --;
-                        }
-                        else
-                            return;
-
-                    }
-                    catch(NullPointerException e)
-                    {
-
-                    }
-                }
-
-            }
-        }
-
-    }
-
+    
     // Hace la búsqueda y devuelve la lista de enlaces
-    public static List<String> busqueda(int profundidad, int limite) throws java.net.URISyntaxException
+    // Se cambió este método de List a ArrayList
+    public static ArrayList<String> busqueda(int profundidad, int limite) throws java.net.URISyntaxException
     {
         crawlCanciones();
-        Document docInicial = Recuperador.recuperarDocumento("http://www.lyricsmode.com");
-        ArrayList<String> listaInicial = new ArrayList<String>();
-        listaInicial = Spider.obtenerEnlaces(docInicial);
-        crawl(listaInicial, profundidad, limite);
+        //Document docInicial = Recuperador.recuperarDocumento("http://www.lyricsmode.com");
+        //ArrayList<String> listaInicial = new ArrayList<String>();
+        //listaInicial = Spider.obtenerEnlaces(docInicial);
+        //crawl(listaInicial, profundidad, limite);
         //imprimirEnlaces();
-
         return arregloEnlaces(); // Devuelve la lista de enlaces
     }
 
-    public static void crawlCanciones()
+    // Se cambió de void a ArrayList<String> para que devuelva el arreglo global de enlaces
+
+    public static ArrayList<String> crawlCanciones()
     {
         obtenerEnlacesInicialDesdePrincipal("http://www.lyricsmode.com");
         obtenerEnlacesArtistaPorLetra();
         obtenerEnlacesCancionPorArtista();
-        System.out.println("Terminó: " + enlacesCancionesGlobal.size());
+        System.out.println("Tamaño de arreglo de enlacesCancionesGlobal: " + enlacesCancionesGlobal.size());
+        return enlacesCancionesGlobal;
     }
     public static void imprimirEnlaces()
     {

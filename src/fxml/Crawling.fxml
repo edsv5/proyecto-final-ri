@@ -162,7 +162,7 @@
                               <Font size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="abrirBusquedaButton" mnemonicParsing="false" onAction="#abrirVentanaBusqueda" prefHeight="43.0" prefWidth="176.0" text="Iniciar búsqueda" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                        <Button fx:id="abrirBusquedaCrawlButton" mnemonicParsing="false" onAction="#abrirVentanaBusquedaConCrawl" prefHeight="43.0" prefWidth="176.0" text="Iniciar búsqueda" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                            <font>
                               <Font size="15.0" />
                            </font>

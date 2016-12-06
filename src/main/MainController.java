@@ -27,8 +27,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
-import static main.Spider.arregloEnlaces;
-import static main.Spider.busqueda;
+import static main.Spider.crawlCanciones;
 
 public class MainController implements Initializable {
 
@@ -57,7 +56,7 @@ public class MainController implements Initializable {
     @FXML
     private Button iniciarCrawlingButton; // Botón de iniciar crawling
     @FXML
-    private Button abrirBusquedaButton; // Botón de iniciar búsqueda
+    private Button abrirBusquedaCrawlButton; // Botón de iniciar búsqueda
     @FXML
     private Button menuButton; // Menú que va desde la búsqueda con crawl hacia el menú principal
 
@@ -137,6 +136,20 @@ public class MainController implements Initializable {
         secondStage.setScene(secondScene);
         secondStage.show();
     }
+    // Cierra la ventana de crawl y hace la búsqueda
+    public void abrirVentanaBusquedaConCrawl(ActionEvent event) throws IOException{
+        // Cierra la ventana actual
+        Stage stagePorCerrar = (Stage) abrirBusquedaCrawlButton.getScene().getWindow();
+        stagePorCerrar.close();
+        // Crea y abre la interfaz que muestra resultados
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Buscador.fxml"));
+        Parent root = (Parent)loader.load();
+        Scene secondScene = new Scene(root, 600, 400); // Se crea la scene
+        Stage secondStage = new Stage();
+        secondStage.setTitle("Buscador");
+        secondStage.setScene(secondScene);
+        secondStage.show();
+    }
 
     private Service<Void> taskBuscar;
 
@@ -194,14 +207,14 @@ public class MainController implements Initializable {
     }
 
     //Tarea de hacer el crawling de enlaces
-    public void runTaskBusqueda(int profundidad, int limite) throws JSONException
-    {
+    public void runTaskBusqueda(int profundidad, int limite) throws JSONException, URISyntaxException {
         // Deshabilita los botones
         iniciarCrawlingButton.setDisable(true);
-        abrirBusquedaButton.setDisable(true);
+        abrirBusquedaCrawlButton.setDisable(true);
         progressBarCrawl.setProgress(0.1); //ACTUALIZA
         txtProgreso.setText("Crawling...");
-        ArrayList<String> lista = crawlear(profundidad, limite); // Se almacena la lista de enlaces
+        ArrayList<String> lista = crawlCanciones(); // Se almacena la lista de enlaces
+        //Spider.crawlCanciones(); // Crawlea
 
         progressBarCrawl.setProgress(0.2); //ACTUALIZA
         txtProgreso.setText("Extrayendo...");
@@ -239,34 +252,25 @@ public class MainController implements Initializable {
 
         progressBarCrawl.setProgress(1); //ACTUALIZA
         txtProgreso.setText("Completado");
-        imprimirEnlaces(lista);
-        iniciarCrawlingButton.setDisable(false);
-        abrirBusquedaButton.setDisable(false);
+        imprimirEnlaces(lista); // Imprime los enlaces en la interfaz
+        iniciarCrawlingButton.setDisable(false); // Reactiva los botones
+        abrirBusquedaCrawlButton.setDisable(false);
 
     }
 
-    // Para que la araña crawlee, devuelve la lista de los enlaces
-    public ArrayList<String> crawlear(int profundidad, int limite)
-    {
-        System.out.println("Crawling iniciado");
-        try
-        {
-            List<String> arregloEnlaces = busqueda(profundidad,limite);
-            enlacesTextArea.appendText("Enlaces:" + System.lineSeparator());
-        }
-        catch(URISyntaxException e){}
-        return arregloEnlaces();
-    }
+    // Para que la araña crawlee, devuelve la lista de los enlaces para imprimirla en el textbox
+    //public ArrayList<String> crawlear(int profundidad, int limite) throws URISyntaxException {
+        //System.out.println("Crawling iniciado");
+        //try
+        //{
+        // busqueda(profundidad,limite); // Hace la búsqueda para crear la lista de enlaces
+        //enlacesTextArea.appendText("Enlaces:" + System.lineSeparator());
+        //}
+        //catch(URISyntaxException e){}
+        //return busqueda(profundidad,limite);
+    //}
 
-    // Indexación de la araña
-    public void indexar()
-    {
-        System.out.println("indexar iniciado");
-        BSBI_Indexer.creacionIndices(10);
-    }
-
-    // Imprimir los enlaces en la cajita de abajo, recibe una lista de enlacs
-
+    // Imprimir los enlaces en el textArea de abajo, recibe una lista de enlaces
     public void imprimirEnlaces(List<String> listaEnlaces){
         System.out.println("Imprimiendo enlaces 2 " + listaEnlaces.size());
         for(String en: listaEnlaces) // Por cada string que devuelve el método crawlear
