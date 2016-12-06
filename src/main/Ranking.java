@@ -28,8 +28,8 @@ public class Ranking
             score = Vector.normCoseno(pesosConsulta, pesosDoc);
             ranking.add(new ParScoreId(score, id));
         }
-        ordenarRanking();
         agregarPuntajePorFrase(consultaTokens);
+        ordenarRanking();
     }
 
     public static  void agregarPuntajePorFrase(ArrayList<String> consultaTokens)
@@ -58,7 +58,9 @@ public class Ranking
         for(Iterator iterador = indicePosicional.keySet().iterator(); iterador.hasNext();)
         {
             String termino = (String) iterador.next();
-            pesos.add(tfConsulta(termino, consultaTokens) * idf(termino, numDocs ));
+            double tf  = PuntajeTFIDF.tfConsulta(indicePosicional, termino, consultaTokens);
+            double idf = PuntajeTFIDF.idf(indicePosicional, termino, numDocs );
+            pesos.add(tf * idf );
 
         }
         return pesos;
@@ -70,46 +72,14 @@ public class Ranking
         for(Iterator iterador = indicePosicional.keySet().iterator(); iterador.hasNext();)
         {
             String termino = (String) iterador.next();
-            pesos.add(tf(termino, idDocumento) * idf(termino, numDocs));
+            double tf  = PuntajeTFIDF.tf(indicePosicional, termino, idDocumento);
+            double idf = PuntajeTFIDF.idf(indicePosicional, termino, numDocs);
+            pesos.add(tf * idf);
         }
         return pesos;
     }
 
-    public static double tf(String termino, int docId)
-    {
-        double pesoTf = 0;
-        JSONArray postings = (JSONArray) indicePosicional.get(termino);
-        for (int i = 0 ; i < postings.size(); i++)
-        {
-            JSONObject obj = (JSONObject) postings.get(i);
-            int idDocJson = (int) (long) obj.get("idDoc");
-            if(idDocJson == docId)
-            {
-                pesoTf = 1 + Math.log10((long) obj.get("frecuencia"));
-                break;
-            }
-        }
-        return pesoTf;
-    }
 
-    public static double tfConsulta( String termino, ArrayList<String> tokensConsulta)
-    {
-        double pesoTf = 0;
-        double tf = Collections.frequency(tokensConsulta, termino);
-        if(tf > 0)
-            pesoTf = 1 + Math.log10(tf);
-        return pesoTf;
-    }
-
-
-    public static double idf(String termino, int numDocs)
-    {
-        double pesoIdf = 0;
-        JSONArray postings = (JSONArray) indicePosicional.get(termino);
-        double df = postings.size();
-        pesoIdf = Math.log10(numDocs / df);
-        return pesoIdf;
-    }
 
     public static int obtenerNumdocs()
     {

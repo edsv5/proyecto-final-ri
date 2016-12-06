@@ -13,29 +13,6 @@ public class PreprocesadorLDocumentos
     static ArrayList<ArrayList<String>> documentos = new ArrayList<ArrayList<String>>();
 
     /*
-    * Extrae texto proveniente de párrafos, títulos, listas y tablas de cada documento.
-    * */
-    public static String extraerTexto(Document doc)
-    {
-        String texto = "";
-
-        StringBuilder concatenacion = new StringBuilder();
-
-        Elements parrafos = doc.select("p, li, h1, h2, h3, h4, h5, h6, th, tr");
-
-        for(Element par : parrafos)
-        {
-            concatenacion.append(par.text());
-            concatenacion.append(" ");
-        }
-
-        texto = concatenacion.toString();
-
-        return texto;
-    }
-
-
-    /*
     * Se encarga de eliminar carácteres no alfanuméricos, dobles espacios y pasar todas las mayúsculas a minúscula
     * */
     public static String normalizar(String texto)
@@ -75,27 +52,4 @@ public class PreprocesadorLDocumentos
     }
 
 
-    /*
-    * Divide el texto en tokens usando el espacio como delimitador
-    * */
-    public static ArrayList<String> tokenizar(String texto)
-    {
-        ArrayList<String> listaTokens = new ArrayList<String>(Arrays.asList(texto.split(" ")));
-
-        return listaTokens;
-    }
-
-    /*
-    * Llama a todos los métodos anteriores para preprocesar el texto del documento
-    * */
-    public static void preprocesar(Document doc)
-    {
-        ArrayList<String> docPrep = new ArrayList<String>();
-
-        String texto = extraerTexto(doc);
-        texto = normalizar(texto);
-        docPrep = tokenizar(texto);
-
-        documentos.add(docPrep);
-    }
 }

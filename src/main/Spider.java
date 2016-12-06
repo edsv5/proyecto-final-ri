@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 public class Spider
 {
-
     static ArrayList<String> enlacesPorLetra = new ArrayList<String>();
     static ArrayList<String> enlacesArtistasGlobal = new ArrayList<String>();
     static ArrayList<String> enlacesCancionesGlobal = new ArrayList<String>();
@@ -28,42 +27,6 @@ public class Spider
     static String dominio = "";
     static int contadorLinks = 0;
 
-
-    public static ArrayList<String> obtenerEnlaces(Document doc)  throws java.net.URISyntaxException
-    {
-        ArrayList<String> enlacesDoc = new ArrayList<String>();
-        if(doc != null)
-        {
-            Elements links = doc.select("a[href]");
-
-            String titulo = doc.select("title").text();
-            boolean filtrarTitulo = filtrarPorTitulo(titulo);
-
-            if(!filtrarTitulo)
-            {
-                for(Element link : links)
-                {
-
-                    String enlace = link.attr("href");
-                    boolean filtrarEnlace = filtrarPorUrl(enlace);
-                    if(!filtrarEnlace)
-                    {
-                        enlace = link.absUrl("href");
-                        if(enlace.contains(dominio))
-                        {
-                            if(!enlaces.contains(enlace.trim()))
-                            {
-                                enlacesDoc.add(enlace);
-                            }
-                            else {}
-                        }
-                    }
-                }
-            }
-        }
-
-        return enlacesDoc;
-    }
 
     public static void obtenerEnlacesInicialDesdePrincipal(String link)
     {
@@ -113,16 +76,6 @@ public class Spider
         }
     }
 
-    public static boolean filtrarPorTitulo(String titulo)
-    {
-        boolean filtrar = false;
-
-        if(titulo.contains("User") )
-            filtrar = true;
-
-        return filtrar;
-    }
-
 
     // Todas las letras de lyricsmode son del formato http://www.lyricsmode.com/lyrics/<letra>/<artista>/<nombre_de_la_canción>.html
     public static boolean filtrarPorUrl(String enlace){
@@ -143,68 +96,10 @@ public class Spider
     }
 
 
-    public static void crawl(ArrayList<String> links, int profundidad, int limite)  throws java.net.URISyntaxException
-    {
-
-        if(!links.isEmpty())
-        {
-            nivel ++;
-
-            for(String link : links)
-            {
-                if(!enlaces.contains(link))
-                {
-                    enlaces.add(link);
-                    cantidad ++;
-                   // System.out.println("Documento #" + cantidad + " Link: " + link); // Aquí se hace la impresión de cada documento
-
-                    Document doc = Recuperador.recuperarDocumento(link);
-
-                    PreprocesadorLDocumentos.preprocesar(doc);
-
-                    ArrayList<String> res = new ArrayList<String>();
-                    res.add(doc.title());
-                    res.add(link);
-                    Resultados.agregarResultado(cantidad, res);
-
-                    // Aumentar el contador de progreso
-
-                    contadorLinks++;
-
-                    ArrayList<String> nuevosEnlaces = obtenerEnlaces(doc);
-
-                    try
-                    {
-                        if(nivel <= profundidad && cantidad <= limite)
-                        {
-                            crawl(nuevosEnlaces, profundidad, limite);
-                            nivel --;
-                        }
-                        else
-                            return;
-
-                    }
-                    catch(NullPointerException e)
-                    {
-
-                    }
-                }
-
-            }
-        }
-
-    }
-
     // Hace la búsqueda y devuelve la lista de enlaces
     public static List<String> busqueda(int profundidad, int limite) throws java.net.URISyntaxException
     {
         crawlCanciones();
-        Document docInicial = Recuperador.recuperarDocumento("http://www.lyricsmode.com");
-        ArrayList<String> listaInicial = new ArrayList<String>();
-        listaInicial = Spider.obtenerEnlaces(docInicial);
-        crawl(listaInicial, profundidad, limite);
-        //imprimirEnlaces();
-
         return arregloEnlaces(); // Devuelve la lista de enlaces
     }
 

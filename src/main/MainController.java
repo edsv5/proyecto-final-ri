@@ -111,10 +111,7 @@ public class MainController implements Initializable {
 
         taskBuscar.restart();
 
-        // Hacerlo subtarea del hilo principal
-        //th.setDaemon(true);
-        // Correrse
-        //th.start();
+
     }
 
     // Cancela el hilo de la búsqueda, si está activo
@@ -140,11 +137,11 @@ public class MainController implements Initializable {
         IndicePosicional.imprimirIndicePosicional();
         TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
         IndiceJSON.guardarIndicePosicional(indice);
-        Ranking.rankearConsulta("she made it easy");
+        Ranking.rankearConsulta("said to stay away from");
         //Ranking.rankearConsulta("just shut up and be mine");
         Ranking.imprimirRanking();
-        indexar(); // Se indexan
-        imprimirEnlaces(lista);
+        //indexar(); // Se indexan
+        //imprimirEnlaces(lista);
     }
 
     // Para que la araña crawlee, devuelve la lista de los enlaces
@@ -159,33 +156,6 @@ public class MainController implements Initializable {
         catch(URISyntaxException e){}
         return arregloEnlaces();
     }
-
-    // Indexación de la araña
-    public void indexar()
-    {
-        System.out.println("indexar iniciado");
-        BSBI_Indexer.creacionIndices(10);
-    }
-
-    // Imprimir los enlaces en la cajita de abajo, recibe una lista de enlacs
-
-    public void imprimirEnlaces(List<String> listaEnlaces){
-        System.out.println("Imprimiendo enlaces 2 " + listaEnlaces.size());
-        for(String en: listaEnlaces) // Por cada string que devuelve el método crawlear
-        {
-            //System.out.println(en);
-            enlacesTextArea.appendText(en + System.lineSeparator());
-        }
-    }
-
-    // Para que busque los enlaces en el background
-
-
-/*
-    public void stopTaskBusqueda(){
-
-        backgroundThread.stop();
-    }*/
 
 
 
