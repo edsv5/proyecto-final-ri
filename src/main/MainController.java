@@ -153,21 +153,6 @@ public class MainController implements Initializable {
 
     private Service<Void> taskBuscar;
 
-    // Se hace la task afuera para que todos la puedan accesar
-    /*
-    Task taskCrawl = new Task<Void>()
-    {
-        @Override
-        protected Void call() throws Exception {
-            runTaskBusqueda();
-            return null;
-        }
-    };
-    */
-
-    // Crear el hilo afuera para poder accesarlo desde los botones
-    //Thread th = new Thread(taskCrawl);
-
     public void startTaskBusqueda()
     {
         taskBuscar = new Service<Void>() {
@@ -178,10 +163,9 @@ public class MainController implements Initializable {
                     protected Void call() throws Exception {
                         // Toma lo que hay en los campos de texto
                         int limite = Integer.parseInt(txtFldCantidadLinks.getText());
-                        int profundidad = Integer.parseInt(txtFldProfundidadCrawl.getText());
 
                         // Corre el crawl
-                        runTaskBusqueda(profundidad, limite); // Ejecuta el método que hace la búsqueda
+                        runTaskBusqueda(limite); // Ejecuta el método que hace la búsqueda
                         return null;
                     }
                 };
@@ -207,47 +191,63 @@ public class MainController implements Initializable {
     }
 
     //Tarea de hacer el crawling de enlaces
-    public void runTaskBusqueda(int profundidad, int limite) throws JSONException, URISyntaxException {
+    public void runTaskBusqueda(int limite) throws JSONException, URISyntaxException {
         // Deshabilita los botones
         iniciarCrawlingButton.setDisable(true);
         abrirBusquedaCrawlButton.setDisable(true);
+
+        // Crawlea los enlaces
+
         progressBarCrawl.setProgress(0.1); //ACTUALIZA
         txtProgreso.setText("Crawling...");
-        ArrayList<String> lista = crawlCanciones(); // Se almacena la lista de enlaces
-        //Spider.crawlCanciones(); // Crawlea
+        ArrayList<String> lista = crawlCanciones(limite); // Se almacena la lista de enlaces
+
+        // Extrae los objetos de tipo Cancion (que incluyen id, título, artista y letra)
 
         progressBarCrawl.setProgress(0.2); //ACTUALIZA
         txtProgreso.setText("Extrayendo...");
-        ArrayList<Cancion> listaCanciones = Scraper.extraerYAgregarALista(lista);
+        ArrayList<Cancion> listaCanciones = Scraper.extraerYAgregarALista(lista); // Este método toma como parámetro la lista de enlaces y extrae la información necesaria
+
+        // Aquí extrae la información de las canciones y las guarda en BaseCanciones.json
 
         progressBarCrawl.setProgress(0.3); //ACTUALIZA
-        txtProgreso.setText("Guardando información...");
+        txtProgreso.setText("Guardando información en archivo JSON...");
         BaseCancionesJSON.guardarInfoCanciones(listaCanciones);
 
         progressBarCrawl.setProgress(0.4); //ACTUALIZA
         txtProgreso.setText("Creando índice intermedio");
         ArrayList<ContenedorTerminoIdPosicion> indiceIntermedio = IndiceIntermedio.recorrerJSONLeido();
 
+        // Aquí crea indiceInt.txt
+
         progressBarCrawl.setProgress(0.5); //ACTUALIZA
         txtProgreso.setText("Imprimiendo lista...");
         IndiceIntermedio.imprimirLista();
+
+        // Construye el índice posicional a partir del índice intermedio
 
         progressBarCrawl.setProgress(0.6); //ACTUALIZA
         txtProgreso.setText("Construyendo índice posicional...");
         IndicePosicional.construirIndicePosicional(indiceIntermedio);
 
+        // Crea indicePos.txt
+
         progressBarCrawl.setProgress(0.7); //ACTUALIZA
         txtProgreso.setText("Imprimiendo índice posicional...");
         IndicePosicional.imprimirIndicePosicional();
+
+        // Crea IndicePosicional.json
 
         progressBarCrawl.setProgress(0.8); //ACTUALIZA
         txtProgreso.setText("Guardando índice...");
         TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
         IndiceJSON.guardarIndicePosicional(indice);
 
+        // Crea Ranking.txt, aquí es donde se evalúa una consulta y se crea el archivo con los resultados más relevantes
+
         progressBarCrawl.setProgress(0.9); //ACTUALIZA
         txtProgreso.setText("Rankeando consulta...");
-        Ranking.rankearConsulta("said to stay away from");
+        Ranking.rankearConsulta("My momma said to stay away from guys like you");
         Ranking.imprimirRanking();
 
         progressBarCrawl.setProgress(1); //ACTUALIZA
@@ -258,21 +258,11 @@ public class MainController implements Initializable {
 
     }
 
-    // Para que la araña crawlee, devuelve la lista de los enlaces para imprimirla en el textbox
-    //public ArrayList<String> crawlear(int profundidad, int limite) throws URISyntaxException {
-        //System.out.println("Crawling iniciado");
-        //try
-        //{
-        // busqueda(profundidad,limite); // Hace la búsqueda para crear la lista de enlaces
-        //enlacesTextArea.appendText("Enlaces:" + System.lineSeparator());
-        //}
-        //catch(URISyntaxException e){}
-        //return busqueda(profundidad,limite);
-    //}
 
     // Imprimir los enlaces en el textArea de abajo, recibe una lista de enlaces
     public void imprimirEnlaces(List<String> listaEnlaces){
-        System.out.println("Imprimiendo enlaces 2 " + listaEnlaces.size());
+        //System.out.println("Imprimiendo enlaces " + listaEnlaces.size());
+        enlacesTextArea.appendText("Enlaces crawleados" + System.lineSeparator());
         for(String en: listaEnlaces) // Por cada string que devuelve el método crawlear
         {
             //System.out.println(en);

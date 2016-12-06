@@ -1,1 +1,0 @@
-{"frecuencia":9,"posiciones":[3,12,54,69,113,128,144,151,165],"idDoc":5}{"frecuencia":7,"posiciones":[4,85,89,148,155,162,169],"idDoc":5}{"frecuencia":2,"posiciones":[5,24],"idDoc":5}{"frecuencia":2,"posiciones":[6,25],"idDoc":5}{"frecuencia":2,"posiciones":[7,26],"idDoc":5}

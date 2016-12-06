@@ -5,8 +5,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 // Para filtrar con regex
 
@@ -17,74 +15,43 @@ public class Spider
     static ArrayList<String> enlacesArtistasGlobal = new ArrayList<String>();
     static ArrayList<String> enlacesCancionesGlobal = new ArrayList<String>();
     static ArrayList<String> enlaces = new ArrayList<String>();
-    static int nivel = 0;
-    static int cantidad = 0;
-    static String dominio = "";
-    static int contadorLinks = 0;
 
-
-    public static ArrayList<String> obtenerEnlaces(Document doc)  throws java.net.URISyntaxException
-    {
-        ArrayList<String> enlacesDoc = new ArrayList<String>();
-        if(doc != null)
-        {
-            Elements links = doc.select("a[href]");
-
-            String titulo = doc.select("title").text();
-            boolean filtrarTitulo = filtrarPorTitulo(titulo);
-
-            if(!filtrarTitulo)
-            {
-                for(Element link : links)
-                {
-
-                    String enlace = link.attr("href");
-                    boolean filtrarEnlace = filtrarPorUrl(enlace);
-                    if(!filtrarEnlace)
-                    {
-                        enlace = link.absUrl("href");
-                        if(enlace.contains(dominio))
-                        {
-                            if(!enlaces.contains(enlace.trim()))
-                            {
-                                enlacesDoc.add(enlace);
-                            }
-                            else {}
-                        }
-                    }
-                }
-            }
-        }
-        return enlacesDoc;
-    }
-
+    // Recupera el documento inicial
     public static void obtenerEnlacesInicialDesdePrincipal(String link)
     {
+        int contadorEnlaces = 0;
         Document doc = Recuperador.recuperarDocumento(link);
+        // Selecciona todos los enlaces que encuentre en el documento
         Elements enlaces = doc.select(".clearfix.fs13.char_nav a");
         for(Element enlace: enlaces)
         {
             enlacesPorLetra.add(enlace.absUrl("href"));
+            contadorEnlaces++; // Para ver cuántos enlaces encuentra
         }
+        System.out.println("Cantidad de enlaces encontrados en documento inicial: " + contadorEnlaces);
     }
 
     public static void obtenerEnlacesArtistaPorLetra()
     {
-
+        int contadorEnlacesArtistas = 0;
         for(String enlaceLetra: enlacesPorLetra)
         {
+            // Recupera el documento del enlace de la letra
             Document doc = Recuperador.recuperarDocumento(enlaceLetra);
             Elements artistas = doc.select("a[href^=/lyrics/][title]");
             for(Element enlaceArtista: artistas)
             {
                 enlacesArtistasGlobal.add(enlaceArtista.absUrl("href"));
+                contadorEnlacesArtistas++;
             }
         }
+        System.out.println("Enlaces de artistas encontrados en total: " + contadorEnlacesArtistas);
     }
 
-    public static void obtenerEnlacesCancionPorArtista()
+    public static void obtenerEnlacesCancionPorArtista(int cantidad)
     {
-        int contador = 0;
+        System.out.println("HPÑA");
+        int contador = 1; // Empieza en 1 para que crawlee la cantidad ingresada
         for(String enlaceArtista: enlacesArtistasGlobal)
         {
             System.out.println("Artista actual " + enlaceArtista);
@@ -92,7 +59,7 @@ public class Spider
             Elements canciones = doc.select(".ui-song-title");
             for(Element enlaceCancion: canciones)
             {
-                if(contador <= 10)
+                if(contador <= cantidad)
                 {
                     enlacesCancionesGlobal.add(enlaceCancion.absUrl("href"));
                     contador++;
@@ -101,83 +68,20 @@ public class Spider
                 {
                     return;
                 }
-
             }
         }
-    }
-
-    public static boolean filtrarPorTitulo(String titulo)
-    {
-        boolean filtrar = false;
-
-        if(titulo.contains("User") )
-            filtrar = true;
-
-        return filtrar;
-    }
-
-
-    // Todas las letras de lyricsmode son del formato http://www.lyricsmode.com/lyrics/<letra>/<artista>/<nombre_de_la_canción>.html
-    public static boolean filtrarPorUrl(String enlace){
-        //System.out.println("Link: " + enlace);
-        boolean filtrar = true;
-        String patron = "/lyrics/[a-z]/\\w+/\\w+.html";
-        Pattern p = Pattern.compile(patron);
-        Matcher m = p.matcher(enlace);
-        // Si encuentra matches en el patrón del link, no filtrar
-        if (m.find() ) {
-            filtrar = false;
-            //System.out.println("Link valido: " + enlace);
-        }else{
-            //System.out.println("El link es caca: " + enlace);
-        }
-
-        return filtrar;
-    }
-    
-    // Hace la búsqueda y devuelve la lista de enlaces
-    // Se cambió este método de List a ArrayList
-    public static ArrayList<String> busqueda(int profundidad, int limite) throws java.net.URISyntaxException
-    {
-        crawlCanciones();
-        //Document docInicial = Recuperador.recuperarDocumento("http://www.lyricsmode.com");
-        //ArrayList<String> listaInicial = new ArrayList<String>();
-        //listaInicial = Spider.obtenerEnlaces(docInicial);
-        //crawl(listaInicial, profundidad, limite);
-        //imprimirEnlaces();
-        return arregloEnlaces(); // Devuelve la lista de enlaces
+        System.out.println("Contador enlaces canción por artista: " + contador);
     }
 
     // Se cambió de void a ArrayList<String> para que devuelva el arreglo global de enlaces
 
-    public static ArrayList<String> crawlCanciones()
+    public static ArrayList<String> crawlCanciones(int cantidad)
     {
         obtenerEnlacesInicialDesdePrincipal("http://www.lyricsmode.com");
         obtenerEnlacesArtistaPorLetra();
-        obtenerEnlacesCancionPorArtista();
+        obtenerEnlacesCancionPorArtista(cantidad);
         System.out.println("Tamaño de arreglo de enlacesCancionesGlobal: " + enlacesCancionesGlobal.size());
         return enlacesCancionesGlobal;
-    }
-    public static void imprimirEnlaces()
-    {
-        System.out.println("Impresión de araña: ");
-        for(String en: enlaces)
-        {
-            System.out.println(en);
-        }
-    }
-
-    // Devuelve un arreglo con el string que se debe imprimir
-    public static ArrayList<String> arregloEnlaces(){
-        System.out.println("arregloEnlaces");
-        // Se crea el arreglo
-        ArrayList<String> arregloEnlaces = new ArrayList<String>();
-        // Se le pegan todos los enlaces en orden
-        for(String en: enlacesCancionesGlobal)
-        {
-            arregloEnlaces.add(en); // Se agrega el string al arreglo
-        }
-        return arregloEnlaces;
     }
 
 }

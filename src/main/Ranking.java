@@ -7,8 +7,10 @@ import org.json.simple.JSONObject;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class Ranking
 {
@@ -134,10 +136,10 @@ public class Ranking
     public static void imprimirRanking()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("Score DocId\n");
+        sb.append("Score - DocId" + System.lineSeparator());
         for(ParScoreId par : ranking)
         {
-            sb.append(par.getScore() + " " + par.getDocId() + "\n");
+            sb.append(par.getScore() + " - " + par.getDocId() + System.lineSeparator());
         }
 
         try (PrintStream out = new PrintStream(new FileOutputStream("Ranking.txt")))

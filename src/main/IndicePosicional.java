@@ -85,7 +85,6 @@ public class IndicePosicional
     }
 
 
-
     public static void imprimirIndicePosicional()
     {
         StringBuilder sb = new StringBuilder();
