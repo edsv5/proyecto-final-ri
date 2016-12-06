@@ -71,6 +71,10 @@ public class MainController implements Initializable {
     @FXML
     private Button bSalir;
 
+    // Cosas de búsqueda sin crawl
+    @FXML
+    private TextField txtPalabrasBusqueda;
+
     private Stage resultadosStage;
     // Esto sucede cuando se presiona el botón de búsqueda
     public void iniciarBusqueda(ActionEvent event) throws IOException {
@@ -152,6 +156,7 @@ public class MainController implements Initializable {
     }
 
     private Service<Void> taskBuscar;
+    private Service<Void> taskRank;
 
     public void startTaskBusqueda()
     {
@@ -220,31 +225,36 @@ public class MainController implements Initializable {
 
         // Aquí crea indiceInt.txt
 
-        progressBarCrawl.setProgress(0.5); //ACTUALIZA
+        progressBarCrawl.setProgress(0.6); //ACTUALIZA
         txtProgreso.setText("Imprimiendo lista...");
         IndiceIntermedio.imprimirLista();
 
         // Construye el índice posicional a partir del índice intermedio
 
-        progressBarCrawl.setProgress(0.6); //ACTUALIZA
+        progressBarCrawl.setProgress(0.8); //ACTUALIZA
         txtProgreso.setText("Construyendo índice posicional...");
         IndicePosicional.construirIndicePosicional(indiceIntermedio);
 
         // Crea indicePos.txt
 
-        progressBarCrawl.setProgress(0.7); //ACTUALIZA
+        progressBarCrawl.setProgress(0.9); //ACTUALIZA
         txtProgreso.setText("Imprimiendo índice posicional...");
         IndicePosicional.imprimirIndicePosicional();
 
         // Crea IndicePosicional.json
 
-        progressBarCrawl.setProgress(0.8); //ACTUALIZA
+        progressBarCrawl.setProgress(1); //ACTUALIZA
         txtProgreso.setText("Guardando índice...");
+        txtProgreso.setText("Completado, favor realice su búsqueda");
         TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
         IndiceJSON.guardarIndicePosicional(indice);
 
-        // Crea Ranking.txt, aquí es donde se evalúa una consulta y se crea el archivo con los resultados más relevantes
+        imprimirEnlaces(lista); // Imprime los enlaces en la interfaz
+        //iniciarCrawlingButton.setDisable(false); // Reactiva los botones
+        abrirBusquedaCrawlButton.setDisable(false);
 
+        // Crea Ranking.txt, aquí es donde se evalúa una consulta y se crea el archivo con los resultados más relevantes
+        /*
         progressBarCrawl.setProgress(0.9); //ACTUALIZA
         txtProgreso.setText("Rankeando consulta...");
         Ranking.rankearConsulta("My momma said to stay away from guys like you");
@@ -255,7 +265,57 @@ public class MainController implements Initializable {
         imprimirEnlaces(lista); // Imprime los enlaces en la interfaz
         iniciarCrawlingButton.setDisable(false); // Reactiva los botones
         abrirBusquedaCrawlButton.setDisable(false);
+        */
+    }
 
+    // Lo que hace el botón de buscar en la ventana de Buscador
+    public void realizarBusqueda(){
+        taskRank = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        // Toma lo que hay en los campos de texto
+                        String palabras = txtPalabrasBusqueda.getText();
+
+                        // Corre el rank
+                        runTaskRank(palabras); // Ejecuta el método que hace la búsqueda
+                        return null;
+                    }
+                };
+            }
+        };
+
+        taskRank.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                System.out.println("Rank completado");
+            }
+        });
+
+        taskRank.restart();
+
+    }
+
+    private void runTaskRank(String palabras) {
+        // Primero rankea
+        System.out.println("Rankeando");
+        Ranking.rankearConsulta("My momma said to stay away from guys like you");
+        System.out.println("Imprimiendo ranking");
+        Ranking.imprimirRanking();
+
+        // Después toma el archivo de texto y lo imprime en el campo
+    }
+
+    public void imprimirRanking(){
+        //System.out.println("Imprimiendo enlaces " + listaEnlaces.size());
+        enlacesTextArea.appendText("Enlaces crawleados" + System.lineSeparator());
+        for(String en: listaEnlaces) // Por cada string que devuelve el método crawlear
+        {
+            //System.out.println(en);
+            enlacesTextArea.appendText(en + System.lineSeparator());
+        }
     }
 
 
