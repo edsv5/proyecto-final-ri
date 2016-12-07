@@ -357,17 +357,16 @@ public class MainController implements Initializable {
             System.out.println("Canción: " + arregloInformacion[1]);
             System.out.println("Letra: " + System.lineSeparator() +  arregloInformacion[2]);
             // Luego se imprime en el textArea
-            textAreaResultados.appendText("--- Doc ID: " + docId + " ---" + System.lineSeparator());
+            textAreaResultados.appendText("--- Doc ID: " + docId + " ---"+ System.lineSeparator());
             textAreaResultados.appendText("--- Artista: " + arregloInformacion[0] + " ---");
             textAreaResultados.appendText(System.lineSeparator());
             textAreaResultados.appendText("--- Canción: " + arregloInformacion[1] + " ---");
             textAreaResultados.appendText(System.lineSeparator());
-            textAreaResultados.appendText("--- Letra ---" + System.lineSeparator() +  arregloInformacion[2] + System.lineSeparator());
+            textAreaResultados.appendText("Letra" + System.lineSeparator() +  arregloInformacion[2] + System.lineSeparator());
         }
         btnBuscar.setDisable(true); // Solo se puede hacer una búsqueda a la vez
 
     }
-
 
     // Imprimir los enlaces en el textArea de abajo, recibe una lista de enlaces
     public void imprimirEnlaces(List<String> listaEnlaces){
