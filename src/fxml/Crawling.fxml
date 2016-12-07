@@ -27,9 +27,10 @@
          <top>
             <MenuBar BorderPane.alignment="CENTER">
               <menus>
-                <Menu mnemonicParsing="false" text="Archivo">
+                <Menu mnemonicParsing="false" text="Programa">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#doExit" text="Salir" />
+                        <MenuItem fx:id="menuButton" mnemonicParsing="false" onAction="#mostrarMenuPrincipal" text="Menú principal" />
+                    <MenuItem fx:id="btnSalirMenu" mnemonicParsing="false" onAction="#doExit" text="Salir" />
                   </items>
                 </Menu>
               </menus>
@@ -43,112 +44,112 @@
             </TextArea>
          </bottom>
          <center>
-            <GridPane style="-fx-border-color: gray;" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="54.0" prefWidth="600.0" style="-fx-border-color: gray;" BorderPane.alignment="CENTER">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="365.0" minWidth="10.0" prefWidth="299.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="299.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="299.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="598.0" minWidth="10.0" prefWidth="398.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <GridPane GridPane.columnIndex="1">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="69.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="115.0" minHeight="10.0" prefHeight="89.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cantidad de links" textAlignment="CENTER" wrappingWidth="200.13671875">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets top="50.0" />
-                           </GridPane.margin>
-                        </Text>
-                        <TextField fx:id="txtFldCantidadLinks" alignment="CENTER" prefHeight="40.0" prefWidth="199.0" promptText="Ingrese la cantidad de links" GridPane.rowIndex="1">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" />
-                           </GridPane.margin>
-                        </TextField>
-                     </children>
-                  </GridPane>
                   <GridPane>
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                            <Button fx:id="iniciarCrawlingButton" mnemonicParsing="false" onAction="#iniciarBusqueda" prefHeight="43.0" prefWidth="176.0" text="Iniciar crawling">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                            </Button>
-                        <ProgressBar fx:id="progressBarCrawl" prefHeight="26.0" prefWidth="199.0" progress="0.0" GridPane.rowIndex="2">
-                           <padding>
-                              <Insets left="10.0" right="15.0" />
-                           </padding>
-                        </ProgressBar>
-                        <Text fx:id="txtProgreso" strokeType="OUTSIDE" strokeWidth="0.0" text="Inactivo" wrappingWidth="138.13671875" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets left="50.0" />
-                           </GridPane.margin>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Estado:" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets left="6.0" />
-                           </GridPane.margin>
-                        </Text>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                                  <Button fx:id="iniciarCrawlingButton" mnemonicParsing="false" onAction="#iniciarBusqueda" prefHeight="40.0" prefWidth="176.0" text="Iniciar crawling" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                                  </Button>
+                              <Button fx:id="abrirBusquedaCrawlButton" disable="true" mnemonicParsing="false" onAction="#abrirVentanaBusquedaConCrawl" prefHeight="40.0" prefWidth="176.0" text="Iniciar búsqueda" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cantidad de links" textAlignment="CENTER" wrappingWidth="200.13671875">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="txtFldCantidadLinks" alignment="CENTER" prefHeight="40.0" prefWidth="199.0" promptText="Ingrese la cantidad de links" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <GridPane.margin>
+                                          <Insets left="5.0" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </GridPane>
                      </children>
                   </GridPane>
-                  <GridPane GridPane.columnIndex="2">
+                  <GridPane GridPane.rowIndex="1">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="92.0" minHeight="0.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="salirButton" mnemonicParsing="false" onAction="#doExit" prefHeight="43.0" prefWidth="176.0" text="Salir" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </Button>
-                        <Button fx:id="menuButton" mnemonicParsing="false" onAction="#mostrarMenuPrincipal" prefHeight="43.0" prefWidth="176.0" text="Menú principal" GridPane.halignment="CENTER">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="abrirBusquedaCrawlButton" mnemonicParsing="false" onAction="#abrirVentanaBusquedaConCrawl" prefHeight="43.0" prefWidth="176.0" text="Iniciar búsqueda" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Button>
+                        <ProgressBar fx:id="progressBarCrawl" prefHeight="26.0" prefWidth="597.0" progress="0.0" GridPane.rowIndex="1">
+                           <padding>
+                              <Insets left="10.0" right="15.0" />
+                           </padding>
+                        </ProgressBar>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.0" minWidth="10.0" prefWidth="81.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="563.0" minWidth="10.0" prefWidth="517.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Estado:">
+                                 <GridPane.margin>
+                                    <Insets left="20.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="txtProgreso" strokeType="OUTSIDE" strokeWidth="0.0" text="Inactivo" wrappingWidth="507.13671875" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </GridPane>
                      </children>
                   </GridPane>
                </children>

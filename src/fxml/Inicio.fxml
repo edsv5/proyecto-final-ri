@@ -59,7 +59,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="bSinCrawl" mnemonicParsing="false" onAction="#abrirVentanaBusqueda" prefHeight="58.0" prefWidth="269.0" text="Búsqueda sin crawl" GridPane.halignment="CENTER">
+                  <Button fx:id="bSinCrawl" mnemonicParsing="false" onAction="#abrirVentanaBusquedaSinCrawl" prefHeight="58.0" prefWidth="269.0" text="Búsqueda sin crawl" GridPane.halignment="CENTER">
                      <font>
                         <Font size="18.0" />
                      </font>

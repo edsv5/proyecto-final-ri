@@ -11,10 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONException;
@@ -48,8 +45,6 @@ public class MainController implements Initializable {
     @FXML
     private TextField txtFldCantidadLinks; // Texto que ingresa el usuario para decidir la cantidad de links
     @FXML
-    private TextField txtFldProfundidadCrawl; // Texto que ingresa el usuario para decidir la profundidad
-    @FXML
     private ProgressBar progressBarCrawl;
     @FXML
     private Text txtProgreso; // Label que indica el estado del crawling
@@ -58,18 +53,21 @@ public class MainController implements Initializable {
     @FXML
     private Button abrirBusquedaCrawlButton; // Botón de iniciar búsqueda
     @FXML
-    private Button menuButton; // Menú que va desde la búsqueda con crawl hacia el menú principal
+    private MenuItem menuButton; // Menú que va desde la búsqueda con crawl hacia el menú principal
+    @FXML
+    private MenuItem btnSalirMenu; // Botón del menú para salir
 
     // Botones del inicio
-
     @FXML
     private Button bSinCrawl;
     @FXML
     private Button bConCrawl;
     @FXML
     private Button bCreditos;
+
+    // Botones de búsqueda con crawl
     @FXML
-    private Button bSalir;
+    private Button btnBuscar;
 
     // Cosas de búsqueda sin crawl
     @FXML
@@ -97,7 +95,21 @@ public class MainController implements Initializable {
 
     // Cierra la ventana de búsqueda con crawl y abre la de menú principal
     public void mostrarMenuPrincipal() throws IOException {
-        Stage stagePorCerrar = (Stage) menuButton.getScene().getWindow();
+        Stage stagePorCerrar = (Stage) iniciarCrawlingButton.getScene().getWindow();
+        stagePorCerrar.close();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Inicio.fxml"));
+        Parent root = (Parent)loader.load();
+        Scene scene = new Scene(root, 444, 400); // Se crea la scene
+        Stage stage = new Stage();
+        stage.setTitle("Menú principal");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    // Regresa al menú principal desde la pantalla de búsqueda con crawl
+    public void mostrarMenuPrincipalDesdeBusqueda() throws IOException {
+        Stage stagePorCerrar = (Stage) btnBuscar.getScene().getWindow();
         stagePorCerrar.close();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Inicio.fxml"));
         Parent root = (Parent)loader.load();
@@ -120,14 +132,16 @@ public class MainController implements Initializable {
         Parent root = (Parent)loader.load();
         Scene secondScene = new Scene(root, 600, 400); // Se crea la scene
         Stage secondStage = new Stage();
-        secondStage.setTitle("Búsqueda con crawl");
+        secondStage.setTitle("Crawling");
         secondStage.setScene(secondScene);
         secondStage.setResizable(false);
+        // Bloquea desde el inicio el botón de búsqueda, ya que debe hacerse un crawl antes de la búsqueda
         secondStage.show();
+
     }
 
     // Cierra la ventana de menú principal  abre la ventana de búsqueda sin crawl
-    public void abrirVentanaBusqueda(ActionEvent event) throws IOException{
+    public void abrirVentanaBusquedaSinCrawl(ActionEvent event) throws IOException{
         // Cierra la ventana actual
         Stage stagePorCerrar = (Stage) bSinCrawl.getScene().getWindow();
         stagePorCerrar.close();
@@ -136,7 +150,7 @@ public class MainController implements Initializable {
         Parent root = (Parent)loader.load();
         Scene secondScene = new Scene(root, 600, 400); // Se crea la scene
         Stage secondStage = new Stage();
-        secondStage.setTitle("Buscador");
+        secondStage.setTitle("Búsqueda sin crawl");
         secondStage.setScene(secondScene);
         secondStage.show();
     }
@@ -150,7 +164,7 @@ public class MainController implements Initializable {
         Parent root = (Parent)loader.load();
         Scene secondScene = new Scene(root, 600, 400); // Se crea la scene
         Stage secondStage = new Stage();
-        secondStage.setTitle("Buscador");
+        secondStage.setTitle("Búsqueda con crawl");
         secondStage.setScene(secondScene);
         secondStage.show();
     }
@@ -199,7 +213,7 @@ public class MainController implements Initializable {
     public void runTaskBusqueda(int limite) throws JSONException, URISyntaxException {
         // Deshabilita los botones
         iniciarCrawlingButton.setDisable(true);
-        abrirBusquedaCrawlButton.setDisable(true);
+        //abrirBusquedaCrawlButton.setDisable(true);
 
         // Crawlea los enlaces
 
@@ -305,7 +319,7 @@ public class MainController implements Initializable {
         Ranking.rankearConsulta(palabras);
         System.out.println("Imprimiendo ranking");
         ArrayList<Integer> listaDocIds = Ranking.imprimirRanking();
-        System.out.println("DocIds: ");
+        System.out.println("---------------------- RESULTADOS ----------------------");
         // Por cada docId, imprime en consola y extrae la información
         String[] arregloInformacion = new String[3];
         for(int docId : listaDocIds) {
