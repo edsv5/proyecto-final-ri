@@ -133,12 +133,15 @@ public class Ranking
     }
 
 
-    public static void imprimirRanking()
+    // Se modifica este método para que devuelva el ArrayList con los docIds
+    public static ArrayList<Integer> imprimirRanking()
     {
+        ArrayList<Integer> listaDeDocIds = new ArrayList<Integer>();
         StringBuilder sb = new StringBuilder();
         sb.append("Score - DocId" + System.lineSeparator());
         for(ParScoreId par : ranking)
         {
+            listaDeDocIds.add(par.getDocId()); // Se añade el respectivo docId a la lista
             sb.append(par.getScore() + " - " + par.getDocId() + System.lineSeparator());
         }
 
@@ -146,9 +149,7 @@ public class Ranking
         {
             out.print(sb.toString());
         }
-        catch(IOException ex)
-        {
-
-        }
+        catch(IOException ex) {}
+        return listaDeDocIds;
     }
 }

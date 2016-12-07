@@ -246,6 +246,7 @@ public class MainController implements Initializable {
         progressBarCrawl.setProgress(1); //ACTUALIZA
         txtProgreso.setText("Guardando índice...");
         txtProgreso.setText("Completado, favor realice su búsqueda");
+        //Pone brillante el botón de realizar búsqueda
         TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
         IndiceJSON.guardarIndicePosicional(indice);
 
@@ -298,16 +299,25 @@ public class MainController implements Initializable {
 
     }
 
-    private void runTaskRank(String palabras) {
+    private void runTaskRank(String palabras) throws JSONException {
         // Primero rankea
-        System.out.println("Rankeando");
-        Ranking.rankearConsulta("My momma said to stay away from guys like you");
+        System.out.println("Rankeando búsqueda: " + palabras);
+        Ranking.rankearConsulta(palabras);
         System.out.println("Imprimiendo ranking");
-        Ranking.imprimirRanking();
-
-        // Después toma el archivo de texto y lo imprime en el campo
+        ArrayList<Integer> listaDocIds = Ranking.imprimirRanking();
+        System.out.println("DocIds: ");
+        // Por cada docId, imprime en consola y extrae la información
+        String[] arregloInformacion = new String[3];
+        for(int docId : listaDocIds) {
+            System.out.println(docId);
+            // Almacena en el arreglo temporal
+            arregloInformacion = Asociador.extraerInformacionDeDocId(docId);
+            System.out.println("Artista: " + arregloInformacion[0]);
+            System.out.println("Canción: " + arregloInformacion[1]);
+            System.out.println("Letra: " + System.lineSeparator() +  arregloInformacion[2]);
+        }
     }
-
+/*
     public void imprimirRanking(){
         //System.out.println("Imprimiendo enlaces " + listaEnlaces.size());
         enlacesTextArea.appendText("Enlaces crawleados" + System.lineSeparator());
@@ -317,6 +327,7 @@ public class MainController implements Initializable {
             enlacesTextArea.appendText(en + System.lineSeparator());
         }
     }
+*/
 
 
     // Imprimir los enlaces en el textArea de abajo, recibe una lista de enlaces
