@@ -31,49 +31,57 @@ public class MainController implements Initializable {
     @FXML
     Parent root;
 
-    // Este método no lo vamos a usar aquí
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("Iniciando...");
-    }
-
     // Para hacer referencia al stage principal
 
     // Este es el texto que se va a mostrar cuando apretamos el botón
-    @FXML
-    private TextArea enlacesTextArea; // Donde se imprimen los enlaces
-    @FXML
-    private TextField txtFldCantidadLinks; // Texto que ingresa el usuario para decidir la cantidad de links
-    @FXML
-    private ProgressBar progressBarCrawl;
-    @FXML
-    private Text txtProgreso; // Label que indica el estado del crawling
-    @FXML
-    private Button iniciarCrawlingButton; // Botón de iniciar crawling
-    @FXML
-    private Button abrirBusquedaCrawlButton; // Botón de iniciar búsqueda
-    @FXML
-    private MenuItem menuButton; // Menú que va desde la búsqueda con crawl hacia el menú principal
-    @FXML
-    private MenuItem btnSalirMenu; // Botón del menú para salir
+    @FXML private TextArea enlacesTextArea; // Donde se imprimen los enlaces
+    @FXML private TextField txtFldCantidadLinks; // Texto que ingresa el usuario para decidir la cantidad de links
+    @FXML private ProgressBar progressBarCrawl;
+    @FXML private Text txtProgreso; // Label que indica el estado del crawling
+    @FXML private Button iniciarCrawlingButton; // Botón de iniciar crawling
+    @FXML private Button abrirBusquedaCrawlButton; // Botón de iniciar búsqueda
+    @FXML private MenuItem menuButton; // Menú que va desde la búsqueda con crawl hacia el menú principal
+    @FXML private MenuItem btnSalirMenu; // Botón del menú para salir
 
     // Botones del inicio
-    @FXML
-    private Button bSinCrawl;
-    @FXML
-    private Button bConCrawl;
-    @FXML
-    private Button bCreditos;
+    @FXML private Button bSinCrawl;
+    @FXML private Button bConCrawl;
+    @FXML private Button bCreditos;
 
     // Botones de búsqueda con crawl
-    @FXML
-    private Button btnBuscar;
+    @FXML private TextArea textAreaResultados;
+    @FXML private Button btnBuscar;
 
     // Cosas de búsqueda sin crawl
-    @FXML
-    private TextField txtPalabrasBusqueda;
+    @FXML private TextField txtPalabrasBusqueda;
 
-    private Stage resultadosStage;
+    // Se define la tabla de la búsqueda
+    @FXML private TableView<CancionTabla> tableViewCanciones; // Se declara la tabla
+    // Se definen las columnas
+    @FXML private TableColumn <CancionTabla, String> nombreCol;
+    @FXML private TableColumn <CancionTabla, String> artistaCol;
+    @FXML private TableColumn <CancionTabla, String> enlaceCol;
+
+    @FXML private Stage resultadosStage;
+
+    // Este método no lo vamos a usar aquí
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        System.out.println("Iniciando...");
+
+        // Prepara la tabla
+
+        //nombreCol.setCellFactory(new PropertyValueFactory<CancionTabla, String>("nombreCancion"));
+        //artistaCol.setCellFactory(new PropertyValueFactory<CancionTabla, String>("nombreCancion"));
+        //enlaceCol.setCellFactory(new PropertyValueFactory<CancionTabla, String>("enlace"));
+
+        // Se llena la tabla con el ObservableList creado anteriormente
+
+        //tableViewCanciones.setItems(getDataCanciones());
+    }
+
+
     // Esto sucede cuando se presiona el botón de búsqueda
     public void iniciarBusqueda(ActionEvent event) throws IOException {
 
@@ -146,7 +154,7 @@ public class MainController implements Initializable {
         Stage stagePorCerrar = (Stage) bSinCrawl.getScene().getWindow();
         stagePorCerrar.close();
         // Crea y abre la interfaz que muestra resultados
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Buscador.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/BuscadorSinCrawling.fxml"));
         Parent root = (Parent)loader.load();
         Scene secondScene = new Scene(root, 600, 400); // Se crea la scene
         Stage secondStage = new Stage();
@@ -154,19 +162,25 @@ public class MainController implements Initializable {
         secondStage.setScene(secondScene);
         secondStage.show();
     }
+
     // Cierra la ventana de crawl y hace la búsqueda
     public void abrirVentanaBusquedaConCrawl(ActionEvent event) throws IOException{
+
         // Cierra la ventana actual
         Stage stagePorCerrar = (Stage) abrirBusquedaCrawlButton.getScene().getWindow();
         stagePorCerrar.close();
         // Crea y abre la interfaz que muestra resultados
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Buscador.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/BuscadorConCrawling.fxml"));
         Parent root = (Parent)loader.load();
         Scene secondScene = new Scene(root, 600, 400); // Se crea la scene
         Stage secondStage = new Stage();
         secondStage.setTitle("Búsqueda con crawl");
         secondStage.setScene(secondScene);
         secondStage.show();
+
+        // Prepara las columnas
+
+        System.out.println("Abriendo ventana de búsqueda con crawl");
     }
 
     private Service<Void> taskBuscar;
@@ -260,7 +274,7 @@ public class MainController implements Initializable {
         progressBarCrawl.setProgress(1); //ACTUALIZA
         txtProgreso.setText("Guardando índice...");
         txtProgreso.setText("Completado, favor realice su búsqueda");
-        //Pone brillante el botón de realizar búsqueda
+
         TreeMap<String, ArrayList<Posting>> indice = IndicePosicional.obtenerIndice();
         IndiceJSON.guardarIndicePosicional(indice);
 
@@ -313,6 +327,18 @@ public class MainController implements Initializable {
 
     }
 
+    // Declaraciones del TableView
+
+
+    /*
+    // Devuelve la lista inicial de canciones
+    public ObservableList<CancionTabla> getDataCanciones(){
+        ObservableList<CancionTabla> canciones= FXCollections.observableArrayList();
+        canciones.add(new CancionTabla("El artista", "El nombre", "El enlace"));
+        return canciones;
+    }
+    */
+
     private void runTaskRank(String palabras) throws JSONException {
         // Primero rankea
         System.out.println("Rankeando búsqueda: " + palabras);
@@ -323,25 +349,24 @@ public class MainController implements Initializable {
         // Por cada docId, imprime en consola y extrae la información
         String[] arregloInformacion = new String[3];
         for(int docId : listaDocIds) {
+            // Se imprime primero en consola
             System.out.println(docId);
             // Almacena en el arreglo temporal
             arregloInformacion = Asociador.extraerInformacionDeDocId(docId);
             System.out.println("Artista: " + arregloInformacion[0]);
             System.out.println("Canción: " + arregloInformacion[1]);
             System.out.println("Letra: " + System.lineSeparator() +  arregloInformacion[2]);
+            // Luego se imprime en el textArea
+            textAreaResultados.appendText("--- Doc ID: " + docId + " ---" + System.lineSeparator());
+            textAreaResultados.appendText("--- Artista: " + arregloInformacion[0] + " ---");
+            textAreaResultados.appendText(System.lineSeparator());
+            textAreaResultados.appendText("--- Canción: " + arregloInformacion[1] + " ---");
+            textAreaResultados.appendText(System.lineSeparator());
+            textAreaResultados.appendText("--- Letra ---" + System.lineSeparator() +  arregloInformacion[2] + System.lineSeparator());
         }
+        btnBuscar.setDisable(true); // Solo se puede hacer una búsqueda a la vez
+
     }
-/*
-    public void imprimirRanking(){
-        //System.out.println("Imprimiendo enlaces " + listaEnlaces.size());
-        enlacesTextArea.appendText("Enlaces crawleados" + System.lineSeparator());
-        for(String en: listaEnlaces) // Por cada string que devuelve el método crawlear
-        {
-            //System.out.println(en);
-            enlacesTextArea.appendText(en + System.lineSeparator());
-        }
-    }
-*/
 
 
     // Imprimir los enlaces en el textArea de abajo, recibe una lista de enlaces

@@ -1,4 +1,1 @@
-{"frecuencia":1,"posiciones":[1],"idDoc":5}{"frecuencia":3,"posiciones":[2,2,2],"idDoc":5}
-{"frecuencia":1,"posiciones":[1],"idDoc":5}{"frecuencia":3,"posiciones":[2,2,2],"idDoc":5}
-{"frecuencia":1,"posiciones":[1],"idDoc":5}{"frecuencia":3,"posiciones":[2,2,2],"idDoc":5}
-{"frecuencia":1,"posiciones":[1],"idDoc":10}{"frecuencia":1,"posiciones":[2],"idDoc":10}
+{"frecuencia":1,"posiciones":[1],"idDoc":5}{"frecuencia":1,"posiciones":[2],"idDoc":5}

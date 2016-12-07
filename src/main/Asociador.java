@@ -27,7 +27,6 @@ public class Asociador {
         informacionExtraida[1] = (String) objetoCancion.get("titulo");
         // Se extrae la letra
         informacionExtraida[2] = (String) objetoCancion.get("letra");
-
         return informacionExtraida;
     }
 
