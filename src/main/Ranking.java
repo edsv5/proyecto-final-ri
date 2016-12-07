@@ -19,10 +19,10 @@ public class Ranking
     static JSONObject indicePosicional = new JSONObject();
     static ArrayList<ParScoreId> ranking = new  ArrayList<ParScoreId>();
 
-    public static void rankearConsulta(String consulta)
+    public static void rankearConsulta(String consulta, String nombreDoc)
     {
         obtenerIndice();
-        int numDocs = obtenerNumdocs();
+        int numDocs = obtenerNumdocs(nombreDoc);
         ArrayList<String> consultaTokens = new ArrayList<String>(Arrays.asList(consulta.split(" ")));
         ArrayList<Double> pesosConsulta = construirVectorConsulta(consultaTokens, numDocs);
         for(int id = 1; id <= numDocs; id++)
@@ -127,10 +127,11 @@ public class Ranking
     }
 
     //Obtiene el número de canciones en base
+    // Se ingresa ahora el nombre del documento en los parámetros
 
-    public static int obtenerNumdocs()
+    public static int obtenerNumdocs(String nombreDoc)
     {
-        Object objeto = LectorJSON.leerDatosJSON("BaseCanciones.json");
+        Object objeto = LectorJSON.leerDatosJSON(nombreDoc);
         JSONObject base = (JSONObject) objeto;
         int numDocs = base.keySet().size();
         return numDocs;
@@ -151,7 +152,7 @@ public class Ranking
 
 
     // Se modifica este método para que devuelva el ArrayList con los docIds
-    public static ArrayList<Integer> imprimirRanking()
+    public static ArrayList<Integer> imprimirRanking(String nombreRanking)
     {
         ArrayList<Integer> listaDeDocIds = new ArrayList<Integer>();
         StringBuilder sb = new StringBuilder();
@@ -162,7 +163,7 @@ public class Ranking
             sb.append(par.getScore() + " - " + par.getDocId() + System.lineSeparator());
         }
 
-        try (PrintStream out = new PrintStream(new FileOutputStream("Ranking.txt")))
+        try (PrintStream out = new PrintStream(new FileOutputStream(nombreRanking)))
         {
             out.print(sb.toString());
         }

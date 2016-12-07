@@ -19,11 +19,14 @@ public class Scraper
         for(String enlace: enlacesCanciones)
         {
             Document doc = Recuperador.recuperarDocumento(enlace);
-            String artista = extraerArtista(doc);
-            String titulo  = extraerTitulo(doc);
-            String letra   = extraerLetra(doc);
-            listaCanciones.add(new Cancion(idContador, titulo, artista, letra));
-            idContador ++;
+            if(doc != null){
+                String artista = extraerArtista(doc);
+                String titulo  = extraerTitulo(doc);
+                String letra   = extraerLetra(doc);
+                listaCanciones.add(new Cancion(idContador, titulo, artista, letra));
+                idContador ++;
+            }
+
         }
         return listaCanciones;
     }

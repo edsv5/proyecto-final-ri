@@ -59,17 +59,19 @@ public class Spider
         {
             System.out.println("Artista actual " + enlaceArtista);
             Document doc = Recuperador.recuperarDocumento(enlaceArtista);
-            Elements canciones = doc.select(".ui-song-title");
-            for(Element enlaceCancion: canciones)
-            {
-                if(contador <= cantidad)
+            if(doc != null){
+                Elements canciones = doc.select(".ui-song-title");
+                for(Element enlaceCancion: canciones)
                 {
-                    enlacesCancionesGlobal.add(enlaceCancion.absUrl("href"));
-                    contador++;
-                }
-                else
-                {
-                    return;
+                    if(contador <= cantidad)
+                    {
+                        enlacesCancionesGlobal.add(enlaceCancion.absUrl("href"));
+                        contador++;
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
         }

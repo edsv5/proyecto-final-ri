@@ -79,7 +79,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField fx:id="txtPalabrasBusqueda" prefHeight="29.0" prefWidth="363.0" promptText="Ingrese aquí palabras clave para la búsqueda" GridPane.halignment="CENTER">
+                        <TextField fx:id="txtPalabrasBusquedaSinCrawl" prefHeight="29.0" prefWidth="363.0" promptText="Ingrese aquí palabras clave para la búsqueda" GridPane.halignment="CENTER">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -87,7 +87,7 @@
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#realizarBusqueda" prefHeight="29.0" prefWidth="192.0" text="Buscar" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                        <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#realizarBusquedaSinCrawl" prefHeight="29.0" prefWidth="192.0" text="Buscar" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                            <font>
                               <Font size="15.0" />
                            </font>

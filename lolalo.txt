@@ -1,1 +1,0 @@
-{"frecuencia":1,"posiciones":[1],"idDoc":5}{"frecuencia":1,"posiciones":[2],"idDoc":5}

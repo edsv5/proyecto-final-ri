@@ -51,10 +51,9 @@ public class MainController implements Initializable {
     // Botones de búsqueda con crawl
     @FXML private TextArea textAreaResultados;
     @FXML private Button btnBuscar;
-
-    // Cosas de búsqueda sin crawl
     @FXML private TextField txtPalabrasBusqueda;
 
+    @FXML private TextField txtPalabrasBusquedaSinCrawl; // Campo de palabras para la búsqueda sin crawl
     // Se define la tabla de la búsqueda
     @FXML private TableView<CancionTabla> tableViewCanciones; // Se declara la tabla
     // Se definen las columnas
@@ -185,6 +184,7 @@ public class MainController implements Initializable {
 
     private Service<Void> taskBuscar;
     private Service<Void> taskRank;
+    private Service<Void> taskRankSinCrawl;
 
     public void startTaskBusqueda()
     {
@@ -297,6 +297,35 @@ public class MainController implements Initializable {
         */
     }
 
+    public void realizarBusquedaSinCrawl(){
+        taskRankSinCrawl = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        // Toma lo que hay en los campos de texto
+                        String palabras = txtPalabrasBusquedaSinCrawl.getText();
+
+                        // Corre el rank
+                        runTaskRankSinCrawl(palabras); // Ejecuta el método que hace la búsqueda
+                        return null;
+                    }
+                };
+            }
+        };
+
+        taskRankSinCrawl.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                System.out.println("Rank completado");
+            }
+        });
+
+        taskRankSinCrawl.restart();
+
+    }
+
     // Lo que hace el botón de buscar en la ventana de Buscador
     public void realizarBusqueda(){
         taskRank = new Service<Void>() {
@@ -327,24 +356,41 @@ public class MainController implements Initializable {
 
     }
 
-    // Declaraciones del TableView
+    private void runTaskRankSinCrawl(String palabras) throws JSONException {
+        // Primero rankea
+        System.out.println("Rankeando búsqueda: " + palabras);
+        Ranking.rankearConsulta(palabras, "BaseCancionesPrecrawleadas.json");
+        System.out.println("Imprimiendo ranking");
+        ArrayList<Integer> listaDocIds = Ranking.imprimirRanking("RankingSinCrawl.txt");
+        System.out.println("---------------------- RESULTADOS ----------------------");
+        // Por cada docId, imprime en consola y extrae la información
+        String[] arregloInformacion = new String[3];
+        for(int docId : listaDocIds) {
+            // Se imprime primero en consola
+            System.out.println(docId);
+            // Almacena en el arreglo temporal
+            arregloInformacion = Asociador.extraerInformacionDeDocId(docId);
+            System.out.println("Artista: " + arregloInformacion[0]);
+            System.out.println("Canción: " + arregloInformacion[1]);
+            System.out.println("Letra: " + System.lineSeparator() +  arregloInformacion[2]);
+            // Luego se imprime en el textArea
+            textAreaResultados.appendText("--- Doc ID: " + docId + " ---"+ System.lineSeparator());
+            textAreaResultados.appendText("--- Artista: " + arregloInformacion[0] + " ---");
+            textAreaResultados.appendText(System.lineSeparator());
+            textAreaResultados.appendText("--- Canción: " + arregloInformacion[1] + " ---");
+            textAreaResultados.appendText(System.lineSeparator());
+            textAreaResultados.appendText("Letra" + System.lineSeparator() +  arregloInformacion[2] + System.lineSeparator());
+        }
+        btnBuscar.setDisable(true); // Solo se puede hacer una búsqueda a la vez
 
-
-    /*
-    // Devuelve la lista inicial de canciones
-    public ObservableList<CancionTabla> getDataCanciones(){
-        ObservableList<CancionTabla> canciones= FXCollections.observableArrayList();
-        canciones.add(new CancionTabla("El artista", "El nombre", "El enlace"));
-        return canciones;
     }
-    */
 
     private void runTaskRank(String palabras) throws JSONException {
         // Primero rankea
         System.out.println("Rankeando búsqueda: " + palabras);
-        Ranking.rankearConsulta(palabras);
+        Ranking.rankearConsulta(palabras, "BaseCanciones.json");
         System.out.println("Imprimiendo ranking");
-        ArrayList<Integer> listaDocIds = Ranking.imprimirRanking();
+        ArrayList<Integer> listaDocIds = Ranking.imprimirRanking("RankingConCrawl.txt");
         System.out.println("---------------------- RESULTADOS ----------------------");
         // Por cada docId, imprime en consola y extrae la información
         String[] arregloInformacion = new String[3];
