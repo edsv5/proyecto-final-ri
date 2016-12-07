@@ -5,6 +5,13 @@ package main;
  * Frecuencia
  * Posicion
  */
+
+//Clase utilizada como contenedor
+//Guarda el id del documento al cual pertenece el término, su posición dentro del documento y el término en si.
+//Ejemplo: [ "casa" ][ 1 ][ 17 ]
+//Nótese que solo se cuenta con la posicion de la palabra en específico, no con la recopilación de todas las posiciones
+//correspondiente a la repetición de la palabra en toda la canción
+
 public class ContenedorTerminoIdPosicion implements Comparable<ContenedorTerminoIdPosicion>
 {
     String termino;

@@ -11,9 +11,12 @@ import java.util.ArrayList;
 public class PuntajePorFrase
 {
     static final double AUMENTOPORFRASE = 5;
+    //Lista que guardará los ids de los documentos que contengan cada término de la consulta
     static ArrayList< ArrayList<Integer>> listasDocumentosConConsulta = new ArrayList< ArrayList<Integer>>();
     static ArrayList<ArrayList<JSONObject>> listaObjetosConFrecuencia = new ArrayList< ArrayList<JSONObject>>();
 
+    // Por cada término se obtiene una lista de los ids de documentos que lo contienen
+    //cada lista se agrega a la listaDocumentosConConsulta
 
     public static void llenarListaDocumentosConConsulta(JSONObject indicePosicional, ArrayList<String> consultaTokens)
     {
@@ -24,6 +27,11 @@ public class PuntajePorFrase
         }
     }
 
+    //Agarrando la lista de listas con los docIds en los que aparece cada término
+    //se crea una solo lista de la intersección de todas las listas en listasDocumentosConConsultas
+    //Así al final se tendrá una lista con los documentos que tienen TODOS los términos de la consulta
+    //sin embargo esto no asegura que aparezca la frase seguida en estos documentos
+
     public static ArrayList<Integer> obtenerListaConFraseCompleta()
     {
         ArrayList<Integer> interseccion = listasDocumentosConConsulta.get(0);
@@ -33,6 +41,17 @@ public class PuntajePorFrase
         }
         return interseccion;
     }
+
+    //A partir de la intersección se agregan elementos a la lista de listas de objetos JSON
+    //Esta lista de listas tendrá la siguiente estructura:
+    //Habrá una lista para cada documento que se encuentre en la intersección
+    //Cada lista será una lista de objetos
+    //Se recuperará el objeto con el id de documento para cada uno de los términos de la consulta
+    //Así una lista de estas se vería así por ejemplo:
+    //{ docId: 1, frecuencia: 1, posiciones: [ 1, 2, 3]} - { docId: 1, frecuencia: 1, posiciones: [ 6, 7, 8]} - ...
+    //La idea es que cada elemento de esta lista sea el posting correspondiente al docId en cada uno de los términos de la consulta
+    //Por ello esta lista será tan larga como el número de términos de la consulta
+    //Esta lista facilita la búsqueda de terminos en posiciones consecutivas dentro de un mismo documento
 
     public static void obtenerFrecuenciasDocumentosConFraseCompleta(JSONObject indicePosicional,
                                                                     ArrayList<String> consultaTokens,
@@ -59,6 +78,16 @@ public class PuntajePorFrase
         }
 
     }
+
+    //Es el método más importante, encargado de agregar puntos extra proporcionales a la porción de palabras de la frase
+    //que se encuentren consecutivamente en cada documento que contenga todas las palabras de la frase
+    //Por cada lista de objetos en listaObjetosConPosiciones se hace lo siguiente:
+    //Por ejemplo con la frase: soy Carlos, si se encuentra a "soy" en la posicion 3 del doc 1 y "Carlos" en la posicion 4 del doc 1
+    //Entonces si se da un match con la frase
+    //Por lo tanto la idea es buscar una palabra en una posicion x y asegurarse que la palabra siguiente en la consulta se encuentre en la posicon
+    //x + 1 en el mismo documento y que la palabra que sigue esté en la posicion x + 2, etc.
+    //Cada vez que se cumpla esta condicion se suma un porcentaje de AUMENTOPORFRASE
+    //Si se encontrara la frase entera entonces el aumento a ese documento será igual a AUMENTOFRASE.
 
     public static ArrayList<ParScoreId> revisarSiTieneFrase(ArrayList<String> consultaTokens)
     {
@@ -93,6 +122,9 @@ public class PuntajePorFrase
         return listaPuntajesExtra;
     }
 
+    //Se fija si la posicion ingresada se encuentra en el JSONArray indicado,
+    //Esto sirve para ver si en el siguiente término de la búsqueda se encuentra en cierto documento en la posición deseada
+
     public static boolean estaPosicionEnArray(int posicion, JSONArray arrayPosiciones)
     {
         boolean encontrado = false;
@@ -107,6 +139,8 @@ public class PuntajePorFrase
         }
         return encontrado;
     }
+
+    //Método encargado de obtener la lista de docIds que contengan al término indicado
 
     public static ArrayList<Integer> obtenerListaDocumentosPorTermino(JSONObject indicePosicional, String termino)
     {

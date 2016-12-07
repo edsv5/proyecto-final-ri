@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 
+/*Clase encargada de rankear los documentos con base a la similitud de estos con cada consulta*/
+
 public class Ranking
 {
     static JSONObject indicePosicional = new JSONObject();
@@ -30,9 +32,15 @@ public class Ranking
             score = Vector.normCoseno(pesosConsulta, pesosDoc);
             ranking.add(new ParScoreId(score, id));
         }
+        //Una vez que se tiene el ranking por similitud, es hora de agregar puntos en caso de que la consulta
+        //se encuentre tal como se digitó en alguno de los documentos, o sea una búsqueda por frase
         ordenarRanking();
         agregarPuntajePorFrase(consultaTokens);
     }
+
+    //Se llama a la clase PuntajePorFrase para obtener la lista con los documentos que obtienen puntos extra por clase
+    //junto con la cantidad de puntos que se le asignará
+    //Una vez con la lista se buscan los ids dentro de ranking y se agregan los puntos extra
 
     public static  void agregarPuntajePorFrase(ArrayList<String> consultaTokens)
     {
@@ -54,6 +62,9 @@ public class Ranking
         }
     }
 
+    //Se recorre todo el diccionario posible y a partir de ahí se construye un vector de pesos  para la consulta
+    //usando el pesaje tf-idf
+
     public static ArrayList<Double> construirVectorConsulta(ArrayList<String> consultaTokens, int numDocs)
     {
         ArrayList<Double> pesos = new ArrayList<Double>();
@@ -65,6 +76,8 @@ public class Ranking
         }
         return pesos;
     }
+
+    //Se recorre todo el diccionario posible y a partir de ahí se construye un vector de pesos  para cada documento
 
     public static ArrayList<Double> construirVectorDocumentos(int idDocumento, int numDocs)
     {
@@ -113,6 +126,8 @@ public class Ranking
         return pesoIdf;
     }
 
+    //Obtiene el número de canciones en base
+
     public static int obtenerNumdocs()
     {
         Object objeto = LectorJSON.leerDatosJSON("BaseCanciones.json");
@@ -120,6 +135,8 @@ public class Ranking
         int numDocs = base.keySet().size();
         return numDocs;
     }
+
+    //Se obtiene el índice posicional a partir del documento json creado anteriormente
 
     public static void obtenerIndice()
     {

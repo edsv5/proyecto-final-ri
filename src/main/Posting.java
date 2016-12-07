@@ -2,6 +2,10 @@ package main;
 
 import java.util.ArrayList;
 
+/*Clase que representa los postings del índice posicional, guardando el id del documento, la frecuencia de un término y la lista de posiciones
+     * en el documento
+     * Se asociará una lista de postings a cada término en el indice posicional*/
+
 public class Posting
 {
     private int idDocumento;

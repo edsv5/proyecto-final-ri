@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+/*Se encarga de agarrar el índice intermedio creado anteriormente y acumularlo en un índice posicional verdadero
+* Esto requiere eliminar las repeticiones de términos y acumularlos en sus apariciones por documento, indicando
+* la frecuencia del término en cada documento y agregando las posiciones en una lista que muestre el lugar de aparicion
+* del término en cada documento
+* Los resultados se pueden ver en el indicePos.txt*/
+
 public class IndicePosicional
 {
     static TreeMap<String, ArrayList<Posting>> indice = new TreeMap<String, ArrayList<Posting>>();
@@ -15,6 +21,8 @@ public class IndicePosicional
     {
         return indice;
     }
+
+    //recorre cada documento y crea un posting a partir de cada contenedor, sin embargo aún no se están acumulando los postings
 
     public static void construirIndicePosicional(ArrayList<ContenedorTerminoIdPosicion> indiceIntermedio)
     {
@@ -29,6 +37,11 @@ public class IndicePosicional
 
     }
 
+    //Se ingresan multiples veces el mismo término, pero cada vez con una lista de postings nueva
+    //por ello se usa el valor retornado por el put para obtener la lista de postings vieja y encadenarla con la nueva
+    //La lista sin acumular se puede ver así:
+    // [1, 1, [1]] - [1, 1, [5]]
+
     public static void ingresoPostingsSinAcumular(String termino, Posting postingNuevo)
     {
         ArrayList<Posting> listaPostingsNueva = new ArrayList<Posting>();
@@ -41,6 +54,9 @@ public class IndicePosicional
         }
     }
 
+    //Como los postings tienen ids repetidos entonces se deben de acumular,
+    //para ello se recorre todo el diccionario y se invoca a acumularLista
+
     public static void acumularPostingsPorTermino()
     {
         for(Map.Entry<String, ArrayList<Posting>> entry : indice.entrySet())
@@ -51,6 +67,10 @@ public class IndicePosicional
             indice.put(termino, listaPostings);
         }
     }
+
+    //Método que guarda como primer elemento en la lista acumulada al primer elemento de la lista sin acumular, y se remueve este elemento
+    //de la lista sin acumular
+    //ahora se procede a acumular los postings de listaPostings en listaAcumulada
 
     public static ArrayList<Posting> acumularLista(ArrayList<Posting> listaPostings)
     {
@@ -64,6 +84,15 @@ public class IndicePosicional
         listaAcumulada = combinarOAgregarNuevo(listaPostings, listaAcumulada);
         return listaAcumulada;
     }
+
+    //Método clave para la finalización del índice:
+    //Se referencia a la ultima posicion de la lista acumulada, al principio de este método solo hay un posting, el extraído en acumularLista
+    //Recorre la lista de postings sin acumular y toma la siguiente decisión:
+    //Si coinciden en id de documento entonces se llama al método combinarPosting de postings y se establece este posting como el último de la
+    //lista acumulada
+    //Si no coinciden en id, simplemente se agrega a la lista acumulada
+    //Al final se tendrán listas de postings en las cuales no se repetirá el docId por lista, estará la frecuencia por docId y la lista de posiciones
+    //del término en cada documento
 
     public static ArrayList<Posting> combinarOAgregarNuevo( ArrayList<Posting> listaPostings, ArrayList<Posting> listaAcumulada )
     {

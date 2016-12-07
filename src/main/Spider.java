@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 public class Spider
 {
-
+    //Lista que guarda los links que muestran artistas por letra
     static ArrayList<String> enlacesPorLetra = new ArrayList<String>();
+    //Lista que guarda los links muestran las canciones disponibles por artista
     static ArrayList<String> enlacesArtistasGlobal = new ArrayList<String>();
+    //Lista que guarda los links en si de las canciones que se eligió crawlear
     static ArrayList<String> enlacesCancionesGlobal = new ArrayList<String>();
     static ArrayList<String> enlaces = new ArrayList<String>();
 
@@ -50,8 +52,9 @@ public class Spider
 
     public static void obtenerEnlacesCancionPorArtista(int cantidad)
     {
-        System.out.println("HPÑA");
         int contador = 1; // Empieza en 1 para que crawlee la cantidad ingresada
+        //Con la lista de todos los artistas, se ingresa a cada link de artista y se agregan uno a uno
+        //canciones de cada artista a la lista global, hasta lo que permita la cantidad especificada
         for(String enlaceArtista: enlacesArtistasGlobal)
         {
             System.out.println("Artista actual " + enlaceArtista);

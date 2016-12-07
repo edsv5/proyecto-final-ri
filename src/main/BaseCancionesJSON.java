@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/*Clase encargada de guardar información de todas las canciones crawleadas en un .json del cual se podrán extraer estos datos posteriormente*/
+
 public class BaseCancionesJSON
 {
     public static void guardarInfoCanciones(ArrayList<Cancion> listaCanciones) throws JSONException
@@ -14,6 +16,8 @@ public class BaseCancionesJSON
 
     }
 
+    //Se recorre la lista de canciones y a partir de los valores de cada objeto cancion
+    //se extraen y se guardan como objetos Json
     public static JSONObject procesarCanciones(ArrayList<Cancion> listaCanciones)
     {
         JSONObject objetoCanciones = new JSONObject();
@@ -32,6 +36,8 @@ public class BaseCancionesJSON
         }
         return objetoCanciones;
     }
+
+    //Creación de objeto JSON a partir de cada canción
 
     public static JSONObject datosCancion(Cancion cancion)
     {

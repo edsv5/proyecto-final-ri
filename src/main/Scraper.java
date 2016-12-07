@@ -2,14 +2,16 @@ package main;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-
 public class Scraper
 {
+    //De cada link se creara un objeto Cancion
     static ArrayList<Cancion> listaCanciones = new ArrayList<Cancion>();
+
+    //Se encarga de extraer los datos más relevantes de cada link, en est caso título de canción, nombre de artista y letra
+    //Se crea un objeto Cancion con esta información y se agrega a la lista
 
     public static ArrayList<Cancion> extraerYAgregarALista(ArrayList<String> enlacesCanciones)
     {

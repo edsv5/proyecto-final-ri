@@ -1,5 +1,6 @@
 package main;
 
+//Clase usada para almacenar la información deseada del link de cada cancion, en la clase Scraper
 
 public class Cancion
 {

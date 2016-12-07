@@ -1,5 +1,8 @@
 package main;
 
+/*Clase con métodos de vectores adaptados a listas de doubles
+* Son necesarios para la elaboración del ranking, para comparar vectores de documentos con los de la consulta*/
+
 import java.util.ArrayList;
 
 public class Vector

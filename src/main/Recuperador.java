@@ -1,13 +1,13 @@
 package main;
 
+/*Clase simple que solo tiene el método para recuperar el documento html dado por url
+* A partir de este documento se puede extraer todos los elementos del arbol dom*/
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class Recuperador
 {

@@ -1,5 +1,6 @@
 package main;
 
+/*Clase encargada de obtener un objeto JSON a partir del documento indicado por nombre*/
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
